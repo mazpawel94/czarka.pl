@@ -355,11 +355,11 @@ form.active button {
 
 }
 
-.table.busySoon {
+.table.busy-soon {
     border-color: rgb(70, 104, 38);
 }
 
-.table.busySoon::after {
+.table.busy-soon::after {
     content: attr(data-busy-soon);
     font-family: 'Mali', cursive;
     font-size: .6rem;
@@ -435,7 +435,7 @@ form.active button {
         left: 5px;
     }
 
-    .table.busySoon::after {
+    .table.busy-soon::after {
         font-size: 5.5px;
         font-weight: lighter;
         width: 40px;

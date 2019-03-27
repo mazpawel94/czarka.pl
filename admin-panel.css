@@ -1,0 +1,54 @@
+ body {
+     font-family: arial;
+     box-sizing: border-box;
+ }
+.tables {
+    display: flex;
+    width: auto;
+}
+.table {
+    width: 150px;
+    height: 40px;
+    position: relative;
+    text-align: center;
+    line-height: 40px;
+    /* background-color: rgb(209, 162, 32); */
+}
+.table::after {
+    position: absolute;
+    content: '';
+    width: 1px;
+    height: 600px;
+    background-color: rgb(51, 43, 43);
+    right: 0;
+    top: 40px;
+    z-index: 2;
+
+}
+.hour {
+    position: relative;
+    background-color: rgba(98, 83, 83, 0.199);
+    height: 50px;
+    width: 1350px;
+}
+
+.hour::after {
+    content: '';
+    position: absolute;
+    width: 1350px;
+    height: 1px;
+    background-color: rgb(51, 43, 43);
+    left: 0;
+    bottom: 0;
+}
+
+.reservation {
+    height: 150px;
+    width: 150px;
+    background-color: rgb(180, 190, 39);
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}

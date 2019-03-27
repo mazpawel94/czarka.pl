@@ -1,0 +1,491 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+:root {
+    --color: #171f1e;
+}
+body {
+    background-image: url('img/DSC_4905.jpg');
+    background-size: cover;
+    display: flex;
+    justify-content: space-around;
+    font-family: 'Lato';
+    
+}
+
+header {
+    margin-top: 80px;
+    color: #EEE0CB;
+    text-align: center;
+    width: 40%;
+    min-width: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+.dateWrapper {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    align-items: center;
+    padding: 20px;
+    color: #EEE0CB;
+    width: 300px;
+    margin: auto;
+    border-radius:   10px;  ;
+    -webkit-border-radius:   10px  ;
+    -moz-border-radius:   10px  ;
+    -ms-border-radius:   10px  ;
+    -o-border-radius:   10px  ;
+    z-index: 2;
+}
+
+#date {
+    
+    position: relative;
+    color: #555;
+    z-index: 2;
+    text-align: center;
+    background-color: rgb(245, 241, 228);
+    border-radius: 5px;
+    padding: 5px;
+    height: 20px;
+    width: 100px;
+    cursor: pointer;
+    border: 1px solid #555;
+    
+}
+
+i{
+    font-size: 1.3rem;
+    width: 30px;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: center;
+}
+
+#time {
+    background-color: rgb(245, 241, 228);
+    color: #555;
+    font-size: 0.9rem;
+    width: 70px;
+    height: 20px;
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #555;
+    border-radius: 5px;
+}
+.room {
+    margin: auto;
+    position: relative;
+    background-color: var(--color);
+    width: 700px;
+    height: 700px;
+    box-shadow: 0 0 30px 10px black;
+    border-radius: 3px;
+
+}
+
+.table {
+    position: absolute;
+    border: 3px solid #015323;
+    width: 33%;
+    height: 30%;
+    border-radius: 10px;
+    transition: .3s linear;
+    background-color: #0f0300;
+    color: rgb(175, 214, 145);
+
+}
+
+.name {
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: .8rem;
+    cursor: default;
+}
+
+.table.japanese {
+    width: 8%;
+    height: 15%;
+    top: 10%;
+    left: 5%;
+}
+
+.table.smallIndian {
+    width: 10%;
+    height: 10%;
+    border-radius: 50%;
+    top: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.table.bigIndian {
+    width: 15%;
+    height: 15%;
+    top: 15%;
+    right:10%;
+    
+}
+
+.table.rightChinese {
+    height: 15%;
+    width: 15%;
+    left: 5%;
+    top: 50%;
+    border-color: #015323;
+}
+
+.table.leftChinese {
+    border-radius: 50%;
+    width: 15%;
+    height: 15%;
+   bottom: 5%;
+   left: 5%;
+}
+
+.table.base {
+    width: 10%;
+    height: 10%;
+    left: 30%;
+    top: 35%;
+    
+}
+
+.table.board {
+    width: 15%;
+    height: 15%;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.table.rightRattan {
+    
+    width: 10%;
+    height: 12%;
+    right: 5%;
+    top: 50%;
+}
+.table.leftRattan {
+    
+    width: 10%;
+    height: 15%;
+    right: 5%;
+    bottom: 5%;
+}
+
+.table.busy {
+    border-color: #9C0E15;
+}
+
+
+
+.table::after, .table::before {
+    content: "";
+    opacity: 0;
+    transition: opacity .4s linear;
+}
+
+.table:hover {
+    border-color: #C7F2A7;
+
+}
+.table:hover .name{
+    color: white;
+
+}
+
+.table:hover::after {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    z-index: 3;
+    font-family: 'Mali', cursive;
+    content: attr(data-description);
+    font-size: 0.8rem;
+    height: 40px;
+    line-height: 40px;
+    width: 150px;
+    background-color: #015323;
+    color: beige;
+    padding: 3px;
+    font-weight:normal;
+    letter-spacing: 0.7px;
+    text-align: center;
+    border-radius: 5px;
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+
+}
+
+.table:hover::before {
+    content: "";
+    border-top: 10px solid #015323;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 2rem;
+    opacity: 1;
+
+}
+
+.table.japanese:hover::after, .table.bigIndian:hover::after, .table.smallIndian:hover::after {
+    line-height: calc(40px / 3);
+}
+
+.table.busy::after {
+    content: attr(data-busy);
+    font-family: 'Mali', cursive;
+    font-size: .6rem;
+    text-align: center;
+    color: black;
+    position: absolute;
+    width: 65px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-20deg);
+    height: 40px;
+    line-height: 20px;
+    background-color: rgb(248, 234, 191);
+    opacity: 1;
+    transition: .3s ease-out;
+}
+
+.table.busy:hover::after {
+    width: 160px;
+    height: 100px;
+    font-size: 1.5rem;
+    line-height: 50px;
+    transform: translate(-50%, -50%) rotate(0);
+    border: 1px rgb(48, 41, 41) solid;
+}
+
+.table.busy:hover::before {
+    display: none;
+}
+.room::before {
+    content: "wejście";
+    color: white;
+    line-height: 100%;
+    position: absolute;
+    bottom: -3px;
+    left: 25%;
+    width: 50px;
+    border: 3px solid var(--color);
+}
+
+
+
+
+.change {
+    display: flex;
+}
+
+
+.change button {
+    width: 60px;
+    height: 60px;
+    background-color: #015323;
+    border: none;
+    border-radius: 50%;
+    margin: 10px;
+    color: rgb(245, 241, 228);;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+form {
+    height: 0;
+}
+
+form.active{
+    height: auto;
+    display: block;
+    background-color: rgb(231, 245, 167);
+    box-shadow: black 0 0 24px 4px;
+    /* background-color: #fff; */
+    opacity: .8;
+    width: 400px;
+    border-radius: 10px;
+    text-align: center;
+    /* display: flex;
+    flex-direction: column; */
+}
+
+form.active label {
+    display: inline-block;
+    width: 100px;
+   
+    padding: 5px;
+}
+
+form.active input, select {
+    border-radius: 5px;
+    height: 25px;
+    width: 100px;
+    margin: 10px;
+    text-align: center;
+}
+
+form.active button {
+    border: none;
+    border-radius: 20%;
+    padding: 10px;
+    margin: 20px;
+    font-size: 25px;
+    cursor: pointer;
+    background-color: rgb(26, 21, 21);
+    color: white;
+
+}
+
+.table.busySoon {
+    border-color: rgb(70, 104, 38);
+}
+
+.table.busySoon::after {
+    content: attr(data-busy-soon);
+    font-family: 'Mali', cursive;
+    font-size: .6rem;
+    text-align: center;
+    color: black;
+    position: absolute;
+    width: 65px;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%) rotate(-20deg);
+            transform: translate(-50%, -50%) rotate(-20deg);
+    height: 40px;
+    line-height: 13px;
+    background-color: rgb(248, 234, 191);
+    opacity: 1;
+    -webkit-transition: .3s ease-out;
+    transition: .3s ease-out;
+}
+
+
+.table.example {
+    position: inherit;
+    width: 100px;
+    min-width: 100px;
+    min-height: 100px;
+    margin: 10px;
+}
+.table.example:hover {
+    border-color: #015323;
+}
+.table.example:hover::after,  .table.example:hover::before{
+    display: none;
+}
+
+.legend {
+    display: flex;
+    align-items: center;
+    width: 500px;
+    height: auto;
+}
+
+@media (max-width: 640px) {
+
+    body {
+        flex-direction: column;
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100vh;
+    }
+    .room {
+        width: 300px;
+        height: 300px;
+        border-width: 1px;
+    }
+    .table {
+        border-width: 1px;
+    }
+    .name {
+        font-size: 10px;
+        bottom: -12px;
+    }
+    header {
+        margin-top: 0;
+    }
+    header>h1 {
+        margin-top: 20px;
+        width: 100%;
+        font-size: 15px;
+    }
+    header>h2 {
+        width: 100%;
+        font-size: 13px;
+        left: 5px;
+    }
+
+    .table.busySoon::after {
+        font-size: 5.5px;
+        font-weight: lighter;
+        width: 40px;
+        height: 20px;
+        line-height: 6px;
+    }
+
+    .table:hover::after {
+        font-size: 10px;
+        top: -30px;
+        height: 20px;
+        line-height: 10px;
+        width: 75px;
+        
+    }
+    
+    .table:hover::before {
+        top: -10px;
+        left: 50%;
+    }
+    
+    .table.japanese:hover::after, .table.bigIndian:hover::after, .table.smallIndian:hover::after {
+        font-size: 8px;
+       height: 32px;
+       line-height: 8px;
+       top: -42px;
+    }
+
+    .table.busy::after {
+        font-size: 5.5px;
+        font-weight: lighter;
+        width: 40px;
+        height: 20px;
+        line-height: 10px;
+    }
+
+    
+    .table.busy:hover::after {
+        width: 80px;
+        height: 40px;
+        font-size: 10px;
+        line-height: 20px;
+        -webkit-transform: translateX(-50%) rotate(0);
+                transform: translateX(-50%) rotate(0);
+
+
+    }
+
+.legend {
+    display: none;
+}
+
+}

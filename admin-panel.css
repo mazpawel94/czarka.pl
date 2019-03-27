@@ -46,6 +46,7 @@
     height: 150px;
     width: 150px;
     background-color: rgb(180, 190, 39);
+    position: absolute;
     border-radius: 4px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;

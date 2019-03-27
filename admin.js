@@ -1,16 +1,21 @@
 const newReservation = document.querySelector('.reservation');
 let active = false;
-const activeReservation = (e) => {
+let ofX, ofY;
+function activeReservation (e) {
 active = true;
 newReservation.style.backgroundColor = 'green';
+console.log(e.offsetX, e.offsetY);
+ofX=e.offsetX;
+ofY=e.offsetY;
 }
 
-const dragReservation = e => {
+function dragReservation (e) {
     if(!active) return;
-    console.log(newReservation.style.top, e.clientY);
 
-newReservation.style.left =`${e.clientX}px`;
-newReservation.style.top =`${e.clientY}px`;
+    console.log(newReservation.style.left, ofX);
+
+newReservation.style.left =`${e.clientX - ofX}px`;
+newReservation.style.top =`${e.clientY - ofY}px`;
     
 }
 newReservation.addEventListener('mousedown', activeReservation);

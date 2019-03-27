@@ -245,7 +245,9 @@ i{
 
 }
 
-.table.japanese:hover::after, .table.bigIndian:hover::after, .table.smallIndian:hover::after {
+.table.japanese:hover::after, .table.bigIndian:hover::after, 
+
+.table.smallIndian:hover::after {
     line-height: calc(40px / 3);
 }
 
@@ -421,16 +423,18 @@ form.active button {
     }
 }
 @media (max-width: 640px) {
-
+*{
+        box-sizing: border-box;
+}
     body {
         background-size: cover;
         background-repeat: no-repeat;
-        height: 100vh;
+        height: 120vh;
         overflow-y: hidden;
     }
     .room {
-        width: 300px;
-        height: 300px;
+        width: 80vw;
+        height: 80vw;
         border-width: 1px;
     }
     .table {
@@ -477,7 +481,9 @@ form.active button {
         left: 50%;
     }
     
-    .table.japanese:hover::after, .table.bigIndian:hover::after, .table.smallIndian:hover::after {
+    .table.japanese:hover::after, .table.bigIndian:hover::after, 
+
+.table.smallIndian:hover::after {
         font-size: 8px;
        height: 32px;
        line-height: 8px;
@@ -509,6 +515,17 @@ form.active button {
         flex-grow: 1;
     }
 .legend {
+    display: none;
+}
+
+.td-clock {
+    transform: translate(0, -100%);
+    -webkit-transform: translate(0, -100%);
+    -moz-transform: translate(0, -100%);
+    -ms-transform: translate(0, -100%);
+    -o-transform: translate(0, -100%);
+}
+.td-clock:before {
     display: none;
 }
 

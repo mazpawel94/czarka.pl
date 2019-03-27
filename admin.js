@@ -24,5 +24,7 @@ document.addEventListener('mousemove', dragReservation);
 document.addEventListener('mouseup', () => 
 {
     active = false;
+    newReservation.style.left =`${Math.floor((parseInt(newReservation.style.left) + 60)/150)*150}px`;
+    newReservation.style.top =`${40 + Math.floor(parseInt((newReservation.style.top) + 15)/50)*50}px`;
     newReservation.style.backgroundColor = 'rgb(180, 190, 39)';
 });

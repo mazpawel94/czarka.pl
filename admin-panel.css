@@ -1,6 +1,7 @@
  body {
      font-family: arial;
      box-sizing: border-box;
+     margin:0;
  }
 .tables {
     display: flex;

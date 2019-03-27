@@ -108,11 +108,11 @@ i{
 
 .name {
     position: absolute;
+    font-size: 16px;
     bottom: -35px;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
-    font-size: .8rem;
     cursor: default;
 }
 
@@ -252,7 +252,7 @@ i{
 .table.busy::after {
     content: attr(data-busy);
     font-family: 'Mali', cursive;
-    font-size: .6rem;
+    font-size: 10px;
     text-align: center;
     color: black;
     position: absolute;
@@ -265,15 +265,23 @@ i{
     background-color: rgb(248, 234, 191);
     opacity: 1;
     transition: .3s ease-out;
+    -webkit-transform: translate(-50%, -50%) rotate(-20deg);
+    -moz-transform: translate(-50%, -50%) rotate(-20deg);
+    -ms-transform: translate(-50%, -50%) rotate(-20deg);
+    -o-transform: translate(-50%, -50%) rotate(-20deg);
 }
 
-.table.busy:hover::after {
+.table.busy:hover::after, .table.busy-soon:hover::after {
     width: 160px;
     height: 100px;
-    font-size: 1.5rem;
+    font-size: 20px;
     line-height: 50px;
     transform: translate(-50%, -50%) rotate(0);
     border: 1px rgb(48, 41, 41) solid;
+}
+
+.table.busy-soon:hover::after {
+    line-height: 30px;
 }
 
 .table.busy:hover::before {
@@ -362,7 +370,7 @@ form.active button {
 .table.busy-soon::after {
     content: attr(data-busy-soon);
     font-family: 'Mali', cursive;
-    font-size: .6rem;
+    font-size: 10px;
     text-align: center;
     color: black;
     position: absolute;
@@ -370,7 +378,7 @@ form.active button {
     top: 50%;
     left: 50%;
     -webkit-transform: translate(-50%, -50%) rotate(-20deg);
-            transform: translate(-50%, -50%) rotate(-20deg);
+    transform: translate(-50%, -50%) rotate(-20deg);
     height: 40px;
     line-height: 13px;
     background-color: rgb(248, 234, 191);
@@ -401,13 +409,24 @@ form.active button {
     height: auto;
 }
 
-@media (max-width: 640px) {
+
+@media (max-width: 1200px) {
 
     body {
         flex-direction: column;
+    }
+
+    header {
+        width: 90%;
+    }
+}
+@media (max-width: 640px) {
+
+    body {
         background-size: cover;
         background-repeat: no-repeat;
         height: 100vh;
+        overflow-y: hidden;
     }
     .room {
         width: 300px;
@@ -422,7 +441,8 @@ form.active button {
         bottom: -12px;
     }
     header {
-        margin-top: 0;
+        min-width: 200px;
+        margin: 0 auto;
     }
     header>h1 {
         margin-top: 20px;
@@ -451,7 +471,7 @@ form.active button {
         width: 75px;
         
     }
-    
+
     .table:hover::before {
         top: -10px;
         left: 50%;
@@ -473,17 +493,21 @@ form.active button {
     }
 
     
-    .table.busy:hover::after {
+    .table.busy:hover::after,  .table.busy-soon:hover::after{
         width: 80px;
         height: 40px;
         font-size: 10px;
         line-height: 20px;
         -webkit-transform: translateX(-50%) rotate(0);
                 transform: translateX(-50%) rotate(0);
-
-
+    }
+    .table.busy-soon:hover::after {
+        line-height: 13px;
     }
 
+    main {
+        flex-grow: 1;
+    }
 .legend {
     display: none;
 }

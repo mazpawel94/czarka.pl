@@ -29,12 +29,12 @@ const endReservation = startReservation => {
 };
 
 const setFreeTables = () =>
-  [...tables].forEach(table => table.classList.remove("busy", "busySoon"));
+  [...tables].forEach(table => table.classList.remove("busy", "busy-soon"));
 
 const addThreeHours = hours => {
   const trueHour = parseInt(hours.slice(0, 2));
   const minutes = hours.slice(3, 5);
-  const newHour = trueHour + 3;
+  let newHour = trueHour + 3;
   if (newHour < 10) newHour = `0${newHour}`;
   return `${newHour}:${minutes}`;
 };
@@ -42,6 +42,7 @@ const addThreeHours = hours => {
 const aroundMinutes = () => {
   if (!minutesToAround.classList.contains("on")) return;
   const n = Math.round(minutesToAround.innerHTML / 15) * 15;
+  console.log(n);
   const radius = n * 6;
   rotateClock.style.transform = `rotate(${radius}deg)`;
   if (n < 15 || n == 60) {
@@ -58,7 +59,7 @@ const aroundMinutes = () => {
 function showReservation() {
   setFreeTables();
   const pickedDay = inputDate.value;
-  const pickedHour = inputHour.value;
+  let pickedHour = inputHour.value;
   if (pickedHour.length <= 4) pickedHour = `0${pickedHour}`;
   reservations.forEach(reservation => {
     if (

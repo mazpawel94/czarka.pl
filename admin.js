@@ -1,4 +1,6 @@
 const newReservation = document.querySelector('.reservation');
+const selectTable = document.querySelector('#select-table');
+const selectHour = document.querySelector('#select-hour');
 let active = false;
 let ofX, ofY;
 
@@ -35,30 +37,33 @@ ofY=e.offsetY;
 }
 
 function dragReservation (e) {
-    if(!active) return;
+if(!active) return;
 newReservation.style.left =`${e.clientX - ofX}px`;
 newReservation.style.top =`${e.clientY - ofY}px`;
-    
 }
-newReservation.addEventListener('mousedown', activeReservation);
 
-document.addEventListener('mousemove', dragReservation);
-document.addEventListener('mouseup', () => 
-{
+function putReservation (e) {
     active = false;
+    if(e.target.nodeName === 'SELECT') return;
     newReservation.style.left =`${Math.floor((parseInt(newReservation.style.left) + 60)/150)*150}px`;
     newReservation.style.top =`${40 + Math.floor(parseInt((newReservation.style.top) + 15)/50)*50}px`;
     newReservation.style.backgroundColor = 'rgb(180, 190, 39)';
-});
+    selectTable.value = getTableByDistance(tableDistance, parseInt(newReservation.style.left));
+    selectHour.value = `${(parseInt(newReservation.style.top)-40)/50 + 10}:00`;
+    console.log(`${(parseInt(newReservation.style.top)-40)/50 + 10}:00`);
+}
 
-document.querySelector('#select-table').addEventListener('change', function(e) {
-console.log(tableDistance[e.target.value]);
-newReservation.style.left = `${tableDistance[e.target.value]}px`;
-});
-
-document.querySelector('#select-hour').addEventListener('change', function(e) {
+const getTableByDistance = (tables, value) => 
+    Object.keys(tables).find(key => tables[key] === value);
+  
+function changePositionByHour (e) {
     const distance = (e.target.value).split(':')[0] - 10;
     newReservation.style.top = `${40 + (e.target.value).split(':')[1]*(5/6) + distance*50}px`;
-    console.log(40 + (e.target.value).split(':')[1]*(5/6) + distance*50);
+} 
 
-    })
+newReservation.addEventListener('mousedown', activeReservation);
+document.addEventListener('mousemove', dragReservation);
+document.addEventListener('mouseup', putReservation);
+selectTable.addEventListener('change', () => 
+    newReservation.style.left = `${tableDistance[e.target.value]}px`);
+selectHour.addEventListener('change', changePositionByHour);

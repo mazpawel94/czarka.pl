@@ -14,6 +14,18 @@ const tableDistance = {
     leftRattan: 1200
 };
 
+// const hourDistance = {
+//     10: 0,
+//     smallIndian: 150,
+//     bigIndian: 300,
+//     rightChinese: 450,
+//     leftChinese: 600,
+//     base: 750,
+//     board: 900,
+//     rightRattan: 1050,
+//     leftRattan: 1200
+// };
+
 function activeReservation (e) {
 if(e.target.nodeName === 'SELECT') return;
 active = true;
@@ -39,7 +51,14 @@ document.addEventListener('mouseup', () =>
     newReservation.style.backgroundColor = 'rgb(180, 190, 39)';
 });
 
-document.querySelector('select').addEventListener('change', function(e) {
+document.querySelector('#select-table').addEventListener('change', function(e) {
 console.log(tableDistance[e.target.value]);
 newReservation.style.left = `${tableDistance[e.target.value]}px`;
-})
+});
+
+document.querySelector('#select-hour').addEventListener('change', function(e) {
+    const distance = (e.target.value).split(':')[0] - 10;
+    newReservation.style.top = `${40 + (e.target.value).split(':')[1]*(5/6) + distance*50}px`;
+    console.log(40 + (e.target.value).split(':')[1]*(5/6) + distance*50);
+
+    })

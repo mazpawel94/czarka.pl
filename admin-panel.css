@@ -5,8 +5,11 @@
  body {
      font-family: arial;
      margin:0;
+     text-align: center;
+     background-color: rgba(124, 117, 117, 0.109);
  }
 .tables {
+    margin-left: 50px;
     display: flex;
     width: 1350px;
 }
@@ -30,8 +33,9 @@
 
 }
 .hour {
+    margin-left: 50px;
     position: relative;
-    background-color: rgba(98, 83, 83, 0.199);
+    /* background-color: rgba(98, 83, 83, 0.199); */
     height: 50px;
     width: 1350px;
 }
@@ -46,11 +50,20 @@
     bottom: 0;
 }
 
+.hour::before {
+    content:attr(data-hour);
+    position: absolute;
+    top: -8px;
+    left: -50px;
+}
+
 .reservation {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-image: linear-gradient( 135deg, #FFE985 10%, #FA742B 100%);
     height: 150px;
     width: 150px;
-    background-color: rgb(180, 190, 39);
-    position: absolute;
     border-radius: 4px;
     text-align: center;
     z-index: 5;
@@ -63,21 +76,22 @@
 .reservation input {
     width: 100%;
     height: 25%;
-    font-size: 20px;
     border: none;
-    border-radius: 5px;
+    border-right: 1px solid #FA742B;
+    border-left: 1px solid #FFE985;
+    font-size: 20px;
     text-align: center;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
+    background-color: rgb(250, 245, 219);
+
 }
 
 .reservation select {
     text-align: center;
     width: 70%;
+    height: 25px;
     border: none;
     border-radius: 4px;
+    margin: 15px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     -ms-border-radius: 4px;

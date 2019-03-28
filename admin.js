@@ -1,19 +1,29 @@
 const newReservation = document.querySelector('.reservation');
 let active = false;
 let ofX, ofY;
+
+const tableDistance = {
+    japanese: 0,
+    smallIndian: 150,
+    bigIndian: 300,
+    rightChinese: 450,
+    leftChinese: 600,
+    base: 750,
+    board: 900,
+    rightRattan: 1050,
+    leftRattan: 1200
+};
+
 function activeReservation (e) {
+if(e.target.nodeName === 'SELECT') return;
 active = true;
 newReservation.style.backgroundColor = 'green';
-console.log(e.offsetX, e.offsetY);
 ofX=e.offsetX;
 ofY=e.offsetY;
 }
 
 function dragReservation (e) {
     if(!active) return;
-
-    console.log(newReservation.style.left, ofX);
-
 newReservation.style.left =`${e.clientX - ofX}px`;
 newReservation.style.top =`${e.clientY - ofY}px`;
     
@@ -28,3 +38,8 @@ document.addEventListener('mouseup', () =>
     newReservation.style.top =`${40 + Math.floor(parseInt((newReservation.style.top) + 15)/50)*50}px`;
     newReservation.style.backgroundColor = 'rgb(180, 190, 39)';
 });
+
+document.querySelector('select').addEventListener('change', function(e) {
+console.log(tableDistance[e.target.value]);
+newReservation.style.left = `${tableDistance[e.target.value]}px`;
+})

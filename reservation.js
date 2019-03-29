@@ -92,6 +92,10 @@ xhr.addEventListener("load", function() {
   const date = JSON.parse(this.responseText);
   [...date].forEach(e => reservations.push(e));
   showReservation();
+  [...document.querySelector(".loader").querySelectorAll("div")].forEach(
+    e => (e.style.animationPlayState = "paused")
+  );
+  document.querySelector(".loader").style.display = "none";
 });
 
 xhr.send();

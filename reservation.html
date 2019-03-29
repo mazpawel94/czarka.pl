@@ -34,75 +34,93 @@
   <body>
     <header>
       <h1>
-        Sprawdź dostępność stolika w interesującym Cię terminie i zarezerwuj miejsce dzwoniąc pod numer 12 422 93 82
+        Sprawdź dostępność stolika w interesującym Cię terminie i zarezerwuj
+        miejsce dzwoniąc pod numer 12 422 93 82
       </h1>
       <br />
       <h2>
         Podczas rezerwacji prosimy o podanie dokładnej daty, nazwiska, liczby
-        osób dla których planowana jest rezerwacja oraz, opcjonalnie, nazwy wybranego
-        stolika
+        osób dla których planowana jest rezerwacja oraz, opcjonalnie, nazwy
+        wybranego stolika
       </h2>
-     <div class="legend"> <div class="table example"></div> <p> Stolik wolny</p></div>
-     <div class="legend"><div class="table example" style="border-color: red"></div> <p>Stolik zajęty</p></div>
-     <div class="legend"><div class="table example" style="border-color: rgb(70, 104, 38)"></div><p>Stolik zarezerwowany na godzinę bliską wybranej. Rezerwacja możliwa, jednak tylko do określonej godziny </p></div>
-      
-      
+      <div class="legend">
+        <div class="table example"></div>
+        <p>Stolik wolny</p>
+      </div>
+      <div class="legend">
+        <div class="table example" style="border-color: red"></div>
+        <p>Stolik zajęty</p>
+      </div>
+      <div class="legend">
+        <div class="table example" style="border-color: rgb(70, 104, 38)"></div>
+        <p>
+          Stolik zarezerwowany na godzinę bliską wybranej. Rezerwacja możliwa,
+          jednak tylko do określonej godziny
+        </p>
+      </div>
     </header>
     <main>
-    <div class="dateWrapper">
-      <i class="far fa-calendar-alt"></i>
-      <input
-        id="date"
-        type="text"
-        data-large-mode="true"
-        data-fx="true"
-        data-min-year="2019"
-        data-max-year="2020"
-        data-lang="pl"
-        data-lock="from"
-      />
-      <i class="far fa-clock"></i>
-      <input type="text" id="time" />
-    </div>
-    <div class="room">
-      <div
-        class="table japanese"
-        data-description="stolik dla 2-4 osób z siedzeniami na podłodze"
-      >
-        <div class="name">Japoński</div>
+      <div class="dateWrapper">
+        <i class="far fa-calendar-alt"></i>
+        <input
+          id="date"
+          type="text"
+          data-large-mode="true"
+          data-fx="true"
+          data-min-year="2019"
+          data-max-year="2020"
+          data-lang="pl"
+          data-lock="from"
+        />
+        <i class="far fa-clock"></i>
+        <input type="text" id="time" />
       </div>
-      <div
-        class="table smallIndian"
-        data-description="stolik dla 2-3 osób z siedzeniami na podłodze"
-      >
-        <div class="name">Mały indyjski</div>
+      <div class="room">
+        <div class="loader">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <p>Wczytuję dane...</p>
+        </div>
+        <div
+          class="table japanese"
+          data-description="stolik dla 2-4 osób z siedzeniami na podłodze"
+        >
+          <div class="name">Japoński</div>
+        </div>
+        <div
+          class="table smallIndian"
+          data-description="stolik dla 2-3 osób z siedzeniami na podłodze"
+        >
+          <div class="name">Mały indyjski</div>
+        </div>
+        <div
+          class="table bigIndian"
+          data-description="stolik dla 3-8 osób z siedzeniami na podłodze"
+        >
+          <div class="name">Duży indyjski</div>
+        </div>
+        <div class="table rightChinese" data-description="stolik dla 2-5 osób">
+          <div class="name">Prawy chiński</div>
+        </div>
+        <div class="table base" data-description="stolik dla 1-2 osób">
+          <div class="name">Baza</div>
+        </div>
+        <div class="table rightRattan" data-description="stolik dla 2-3 osób">
+          <div class="name">Prawy rattan</div>
+        </div>
+        <div class="table leftChinese" data-description="stolik dla 2-6 osób">
+          <div class="name">Lewy chiński</div>
+        </div>
+        <div class="table board" data-description="stolik dla 2-5 osób">
+          <div class="name">Tablica</div>
+        </div>
+        <div class="table leftRattan" data-description="stolik dla 2-4 osób">
+          <div class="name">Lewy rattan</div>
+        </div>
       </div>
-      <div
-        class="table bigIndian"
-        data-description="stolik dla 3-8 osób z siedzeniami na podłodze"
-      >
-        <div class="name">Duży indyjski</div>
-      </div>
-      <div class="table rightChinese" data-description="stolik dla 2-5 osób">
-        <div class="name">Prawy chiński</div>
-      </div>
-      <div class="table base" data-description="stolik dla 1-2 osób">
-        <div class="name">Baza</div>
-      </div>
-      <div class="table rightRattan" data-description="stolik dla 2-3 osób">
-        <div class="name">Prawy rattan</div>
-      </div>
-      <div class="table leftChinese" data-description="stolik dla 2-6 osób">
-        <div class="name">Lewy chiński</div>
-      </div>
-      <div class="table board" data-description="stolik dla 2-5 osób">
-        <div class="name">Tablica</div>
-      </div>
-      <div class="table leftRattan" data-description="stolik dla 2-4 osób">
-        <div class="name">Lewy rattan</div>
-      </div>
-    </div>
-  </main>
+    </main>
     <script
       src="https://code.jquery.com/jquery-3.3.1.js"
       integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="

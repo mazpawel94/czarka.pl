@@ -5,7 +5,8 @@ const calendarPage = document.getElementById("datedropper-0");
 const newReservation = document.querySelector(".reservation");
 const selectTable = newReservation.querySelector("#select-table");
 const selectHour = newReservation.querySelector("#select-hour");
-const topDistance = 40;
+const tablesScheme = document.querySelector(".tables");
+const topDistance = tablesScheme.offsetTop + tablesScheme.clientHeight;
 let active = false;
 let ofX, ofY;
 
@@ -31,7 +32,6 @@ function activeReservation(e) {
   if (!e.target.classList.contains("reservation")) return;
   console.log("activereserv");
   active = true;
-  newReservation.style.backgroundColor = "green";
   ofX = e.offsetX;
   ofY = e.offsetY;
 }
@@ -48,7 +48,8 @@ function putReservation(e) {
   newReservation.style.left = `${50 +
     Math.floor((parseInt(newReservation.style.left) + 60) / 150) * 150}px`;
   newReservation.style.top = `${topDistance +
-    Math.floor(parseInt(newReservation.style.top + 15) / 50) * 50}px`;
+    Math.floor((parseInt(newReservation.style.top) - topDistance + 15) / 50) *
+      50}px`;
   newReservation.style.backgroundColor = "rgb(180, 190, 39)";
   selectTable.value = getTableByDistance(
     tableDistance,

@@ -272,7 +272,8 @@ i {
   line-height: 30px;
 }
 
-.table.busy:hover::before {
+.table.busy:hover::before,
+.table.busy-soon:hover::before {
   display: none;
 }
 .room::before {
@@ -421,15 +422,19 @@ form.active button {
 
 .loader :nth-child(1) {
   animation-delay: 2s;
+  opacity: 1;
 }
 .loader :nth-child(2) {
   animation-delay: 0.5s;
+  opacity: 0.75;
 }
 .loader :nth-child(3) {
   animation-delay: 1s;
+  opacity: 0.5;
 }
 .loader :nth-child(4) {
   animation-delay: 1.5s;
+  opacity: 0.25;
 }
 
 .loader p {

@@ -7,15 +7,11 @@ const selectTable = newReservation.querySelector("#select-table");
 const selectHour = newReservation.querySelector("#select-hour");
 const tablesScheme = document.querySelector(".tables");
 const topDistance = tablesScheme.offsetTop + tablesScheme.clientHeight;
+const leftDistance = document.querySelector(".hours").offsetLeft;
 let active = false;
 let ofX, ofY;
+const reservations = [];
 
-const date = new Date();
-const year = date.getFullYear();
-const month = date.getMonth();
-const day = date.getDate();
-const today = `0${month + 1}/${day}/${year}`.toString();
-console.log(today, calendar.value);
 const tableDistance = {
   leftRattan: 0,
   rightRattan: 150,
@@ -27,10 +23,9 @@ const tableDistance = {
   board: 1050,
   base: 1200
 };
-const reservations = [];
+
 function activeReservation(e) {
   if (!e.target.classList.contains("reservation")) return;
-  console.log("activereserv");
   active = true;
   ofX = e.offsetX;
   ofY = e.offsetY;
@@ -45,15 +40,18 @@ function dragReservation(e) {
 function putReservation(e) {
   active = false;
   if (!e.target.classList.contains("reservation")) return;
-  newReservation.style.left = `${50 +
-    Math.floor((parseInt(newReservation.style.left) + 60) / 150) * 150}px`;
+  newReservation.style.left = `${leftDistance +
+    Math.floor(
+      (parseInt(newReservation.style.left) - leftDistance + 60) / 150
+    ) *
+      150}px`;
   newReservation.style.top = `${topDistance +
     Math.floor((parseInt(newReservation.style.top) - topDistance + 15) / 50) *
       50}px`;
   newReservation.style.backgroundColor = "rgb(180, 190, 39)";
   selectTable.value = getTableByDistance(
     tableDistance,
-    parseInt(newReservation.style.left) - 50
+    parseInt(newReservation.style.left) - leftDistance
   );
   selectHour.value = `${(parseInt(newReservation.style.top) - topDistance) /
     50 +
@@ -71,7 +69,6 @@ function changePositionByHour(e) {
 }
 
 const createReservationFromBase = reservation => {
-  console.log(reservation);
   const distance = reservation.hour.split(":")[0] - 10;
   const reservationDiv = document.createElement("div");
   reservationDiv.classList.add("reservation");
@@ -83,7 +80,8 @@ const createReservationFromBase = reservation => {
   reservationDiv.querySelector("#select-table").value = reservation.table;
   reservationDiv.querySelector("#select-hour").value = reservation.hour;
   reservationDiv.querySelector("input").value = reservation.name;
-  reservationDiv.style.left = `${tableDistance[reservation.table] + 50}px`;
+  reservationDiv.style.left = `${tableDistance[reservation.table] +
+    leftDistance}px`;
   reservationDiv.style.top = `${topDistance +
     reservation.hour.split(":")[1] * (5 / 6) +
     distance * 50}px`;
@@ -106,7 +104,9 @@ document.addEventListener("mousemove", dragReservation);
 document.addEventListener("mouseup", putReservation);
 selectTable.addEventListener(
   "change",
-  e => (newReservation.style.left = `${tableDistance[e.target.value] + 50}px`)
+  e =>
+    (newReservation.style.left = `${tableDistance[e.target.value] +
+      leftDistance}px`)
 );
 selectHour.addEventListener("change", changePositionByHour);
 
@@ -115,7 +115,8 @@ xhr.open("GET", getAdress, true);
 xhr.addEventListener("load", function() {
   const date = JSON.parse(this.responseText);
   [...date].forEach(e => reservations.push(e));
-  showDaylyReservations(today);
+  showDaylyReservations(calendar.value);
+  document.querySelector(".loader").remove();
 });
 xhr.send();
 
@@ -124,7 +125,6 @@ document.querySelector(".save").addEventListener("click", () => {
   xhr.open("POST", postAdress, true);
   xhr.setRequestHeader("Content-type", "application/json");
   xhr.addEventListener("load", function() {
-    console.log("odpowiedź:", this.status);
     location.reload();
   });
   xhr.send(`{ "day": "${calendar.value}",

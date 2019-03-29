@@ -19,6 +19,13 @@
     <title>Utwórz rezerwację</title>
   </head>
   <body>
+    <div class="loader">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <p>Wczytuję dane...</p>
+    </div>
     <div class="nav-wrapper">
       <button class="unlock-delete">Usuń rezerwację</button>
       <button class="unlock-change">Edytuj rezerwację</button>
@@ -36,30 +43,37 @@
         />
       </div>
     </div>
-    <div class="tables">
-      <div class="table" style="background-color:lightgreen">Lewy rattan</div>
-      <div class="table" style="background-color:lightgreen">Prawy rattan</div>
-      <div class="table" style="background-color:orange">Duży indyjski</div>
-      <div class="table" style="background-color:orange">Mały indyjski</div>
-      <div class="table" style="background-color:yellow">Japoński</div>
-      <div class="table" style="background-color:lightblue">Lewy chiński</div>
-      <div class="table" style="background-color:lightblue">Prawy chiński</div>
-      <div class="table" style="background-color:violet">Tablica</div>
-      <div class="table" style="background-color:violet">Baza</div>
+    <div class="scheme">
+      <div class="tables">
+        <div class="table" style="background-color:lightgreen">Lewy rattan</div>
+        <div class="table" style="background-color:lightgreen">
+          Prawy rattan
+        </div>
+        <div class="table" style="background-color:orange">Duży indyjski</div>
+        <div class="table" style="background-color:orange">Mały indyjski</div>
+        <div class="table" style="background-color:yellow">Japoński</div>
+        <div class="table" style="background-color:lightblue">Lewy chiński</div>
+        <div class="table" style="background-color:lightblue">
+          Prawy chiński
+        </div>
+        <div class="table" style="background-color:violet">Tablica</div>
+        <div class="table" style="background-color:violet">Baza</div>
+      </div>
+      <div class="hours">
+        <div class="hour" data-hour="10:00"></div>
+        <div class="hour" data-hour="11:00"></div>
+        <div class="hour" data-hour="12:00"></div>
+        <div class="hour" data-hour="13:00"></div>
+        <div class="hour" data-hour="14:00"></div>
+        <div class="hour" data-hour="15:00"></div>
+        <div class="hour" data-hour="16:00"></div>
+        <div class="hour" data-hour="17:00"></div>
+        <div class="hour" data-hour="18:00"></div>
+        <div class="hour" data-hour="19:00"></div>
+        <div class="hour" data-hour="20:00"></div>
+        <div class="hour" data-hour="21:00"></div>
+      </div>
     </div>
-
-    <div class="hour" data-hour="10:00"></div>
-    <div class="hour" data-hour="11:00"></div>
-    <div class="hour" data-hour="12:00"></div>
-    <div class="hour" data-hour="13:00"></div>
-    <div class="hour" data-hour="14:00"></div>
-    <div class="hour" data-hour="15:00"></div>
-    <div class="hour" data-hour="16:00"></div>
-    <div class="hour" data-hour="17:00"></div>
-    <div class="hour" data-hour="18:00"></div>
-    <div class="hour" data-hour="19:00"></div>
-    <div class="hour" data-hour="20:00"></div>
-    <div class="hour" data-hour="21:00"></div>
     <div class="reservation new">
       <input type="text" name="name" autocomplete="off" />
       <select id="select-table">

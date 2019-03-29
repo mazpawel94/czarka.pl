@@ -1,3 +1,5 @@
+$("#date").dateDropper();
+
 const newReservation = document.querySelector(".reservation");
 const selectTable = newReservation.querySelector("#select-table");
 const selectHour = newReservation.querySelector("#select-hour");

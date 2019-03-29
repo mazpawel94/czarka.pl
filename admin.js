@@ -30,8 +30,6 @@ const reservations = [];
 function activeReservation(e) {
   if (!e.target.classList.contains("reservation")) return;
   console.log("activereserv");
-  newReservation.style.backgroundImage =
-    "linear-gradient( 135deg, #81FBB8 10%, #28C76F 100%)";
   active = true;
   newReservation.style.backgroundColor = "green";
   ofX = e.offsetX;
@@ -71,34 +69,34 @@ function changePositionByHour(e) {
     distance * 50}px`;
 }
 
-const createReservationFromBase = (table, hour, name) => {
-  const distance = hour.split(":")[0] - 10;
+const createReservationFromBase = reservation => {
+  console.log(reservation);
+  const distance = reservation.hour.split(":")[0] - 10;
   const reservationDiv = document.createElement("div");
   reservationDiv.classList.add("reservation");
   reservationDiv.innerHTML = newReservation.innerHTML;
-  reservationDiv.querySelector("#select-table").value = table;
-  reservationDiv.querySelector("#select-hour").value = hour;
-  reservationDiv.querySelector("input").value = name;
-  reservationDiv.style.left = `${tableDistance[table] + 50}px`;
+  const deleteDiv = document.createElement("div");
+  deleteDiv.classList.add("delete");
+  deleteDiv.classList.add("hidden");
+  reservationDiv.appendChild(deleteDiv);
+  reservationDiv.querySelector("#select-table").value = reservation.table;
+  reservationDiv.querySelector("#select-hour").value = reservation.hour;
+  reservationDiv.querySelector("input").value = reservation.name;
+  reservationDiv.style.left = `${tableDistance[reservation.table] + 50}px`;
   reservationDiv.style.top = `${topDistance +
-    hour.split(":")[1] * (5 / 6) +
+    reservation.hour.split(":")[1] * (5 / 6) +
     distance * 50}px`;
+  reservationDiv.dataset.id = reservation._id;
   document.body.appendChild(reservationDiv);
 };
 
 const showDaylyReservations = () => {
   const day = calendar.value;
-  console.log("dzen", day);
   [...document.querySelectorAll(".reservation")]
     .filter(e => !e.classList.contains("new"))
     .forEach(e => e.remove());
   reservations.forEach(reservation => {
-    if (reservation.date == day)
-      createReservationFromBase(
-        reservation.table,
-        reservation.hour,
-        reservation.name
-      );
+    if (reservation.date == day) createReservationFromBase(reservation);
   });
 };
 
@@ -137,3 +135,24 @@ document.querySelector(".save").addEventListener("click", () => {
 });
 
 calendarPage.addEventListener("click", showDaylyReservations);
+
+const deleteReservation = id => {
+  let xhr = new XMLHttpRequest();
+  xhr.open("DELETE", getAdress, true);
+  xhr.setRequestHeader("Content-type", "application/json");
+  xhr.addEventListener("load", function() {
+    location.reload();
+  });
+  xhr.send(`{ "id": "${id}"}`);
+};
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("delete")) {
+    deleteReservation(e.target.parentNode.dataset.id);
+  }
+});
+
+document.querySelector(".unlock-delete").addEventListener("click", () => {
+  document
+    .querySelectorAll(".delete")
+    .forEach(e => e.classList.toggle("hidden"));
+});

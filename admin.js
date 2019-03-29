@@ -76,7 +76,11 @@ const createReservationFromBase = reservation => {
   const deleteDiv = document.createElement("div");
   deleteDiv.classList.add("delete");
   deleteDiv.classList.add("hidden");
+  const changeDiv = document.createElement("div");
+  changeDiv.classList.add("diskette");
+  changeDiv.classList.add("hidden");
   reservationDiv.appendChild(deleteDiv);
+  reservationDiv.appendChild(changeDiv);
   reservationDiv.querySelector("#select-table").value = reservation.table;
   reservationDiv.querySelector("#select-hour").value = reservation.hour;
   reservationDiv.querySelector("input").value = reservation.name;
@@ -146,14 +150,42 @@ const deleteReservation = id => {
   });
   xhr.send(`{ "id": "${id}"}`);
 };
+
+const changeReservation = reservation => {
+  console.log(
+    reservation.dataset.id,
+    reservation.querySelector("#select-table").value
+  );
+  const xhr = new XMLHttpRequest();
+  xhr.open("PUT", getAdress, true);
+  xhr.setRequestHeader("Content-type", "application/json");
+  xhr.addEventListener("load", function() {
+    location.reload();
+  });
+  xhr.send(`{ "id": "${reservation.dataset.id}",
+              "day": "${calendar.value}",
+              "hour": "${reservation.querySelector("#select-hour").value}",
+              "name": "${reservation.querySelector("input").value}",
+              "table":"${reservation.querySelector("#select-table").value}"
+            }`);
+};
 document.addEventListener("click", function(e) {
   if (e.target.classList.contains("delete")) {
     deleteReservation(e.target.parentNode.dataset.id);
+  }
+  if (e.target.classList.contains("diskette")) {
+    changeReservation(e.target.parentNode);
   }
 });
 
 document.querySelector(".unlock-delete").addEventListener("click", () => {
   document
     .querySelectorAll(".delete")
+    .forEach(e => e.classList.toggle("hidden"));
+});
+
+document.querySelector(".unlock-change").addEventListener("click", () => {
+  document
+    .querySelectorAll(".diskette")
     .forEach(e => e.classList.toggle("hidden"));
 });

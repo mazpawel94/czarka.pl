@@ -1,5 +1,7 @@
 $("#date").dateDropper();
 
+const calendar = document.querySelector("#date");
+const calendarPage = document.getElementById("datedropper-0");
 const newReservation = document.querySelector(".reservation");
 const selectTable = newReservation.querySelector("#select-table");
 const selectHour = newReservation.querySelector("#select-hour");
@@ -12,19 +14,18 @@ const year = date.getFullYear();
 const month = date.getMonth();
 const day = date.getDate();
 const today = `0${month + 1}/${day}/${year}`.toString();
-console.log(today);
+console.log(today, calendar.value);
 const tableDistance = {
-  japanese: 0,
-  smallIndian: 150,
+  leftRattan: 0,
+  rightRattan: 150,
   bigIndian: 300,
-  rightChinese: 450,
-  leftChinese: 600,
-  base: 750,
-  board: 900,
-  rightRattan: 1050,
-  leftRattan: 1200
+  smallIndian: 450,
+  japanese: 600,
+  leftChinese: 750,
+  rightChinese: 900,
+  board: 1050,
+  base: 1200
 };
-
 const reservations = [];
 function activeReservation(e) {
   if (!e.target.classList.contains("reservation")) return;
@@ -85,6 +86,22 @@ const createReservationFromBase = (table, hour, name) => {
   document.body.appendChild(reservationDiv);
 };
 
+const showDaylyReservations = () => {
+  const day = calendar.value;
+  console.log("dzen", day);
+  [...document.querySelectorAll(".reservation")]
+    .filter(e => !e.classList.contains("new"))
+    .forEach(e => e.remove());
+  reservations.forEach(reservation => {
+    if (reservation.date == day)
+      createReservationFromBase(
+        reservation.table,
+        reservation.hour,
+        reservation.name
+      );
+  });
+};
+
 newReservation.addEventListener("mousedown", activeReservation);
 document.addEventListener("mousemove", dragReservation);
 document.addEventListener("mouseup", putReservation);
@@ -98,12 +115,8 @@ let xhr = new XMLHttpRequest();
 xhr.open("GET", getAdress, true);
 xhr.addEventListener("load", function() {
   const date = JSON.parse(this.responseText);
-  [...date].forEach(e => {
-    if (e.date == today) {
-      reservations.push(e);
-      createReservationFromBase(e.table, e.hour, e.name);
-    }
-  });
+  [...date].forEach(e => reservations.push(e));
+  showDaylyReservations(today);
 });
 xhr.send();
 
@@ -115,10 +128,12 @@ document.querySelector(".save").addEventListener("click", () => {
     console.log("odpowiedź:", this.status);
     location.reload();
   });
-  xhr.send(`{ "day": "${today}",
+  xhr.send(`{ "day": "${calendar.value}",
               "hour": "${selectHour.value}",
               "name": "${newReservation.querySelector("input").value}",
               "table":"${selectTable.value}",
               "numberPeople": 2
             }`);
 });
+
+calendarPage.addEventListener("click", showDaylyReservations);

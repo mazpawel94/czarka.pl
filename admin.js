@@ -106,6 +106,8 @@ const createReservationFromBase = reservation => {
     leftDistance}px`;
   reservationDiv.style.top = changePositionByHour(reservation.hour);
   reservationDiv.dataset.id = reservation._id;
+  if (localStorage.getItem(reservationDiv.dataset.id) === "true")
+    reservationDiv.classList.add("put");
   document.body.appendChild(reservationDiv);
 };
 
@@ -182,6 +184,15 @@ document.addEventListener("click", function(e) {
   }
 });
 
+document.addEventListener("dblclick", function(e) {
+  if (e.target.classList.contains("reservation")) {
+    e.target.classList.toggle("put");
+    localStorage.setItem(
+      e.target.dataset.id,
+      e.target.classList.contains("put")
+    );
+  }
+});
 document.querySelector(".unlock-delete").addEventListener("click", () => {
   document
     .querySelectorAll(".delete")

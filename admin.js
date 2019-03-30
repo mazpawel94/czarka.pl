@@ -6,6 +6,7 @@ const newReservation = document.querySelector(".reservation");
 const selectTable = newReservation.querySelector("#select-table");
 const selectHour = newReservation.querySelector("#select-hour");
 const tablesScheme = document.querySelector(".tables");
+
 const topDistance = tablesScheme.offsetTop + tablesScheme.clientHeight;
 const leftDistance = document.querySelector(".hours").offsetLeft;
 let active = false;
@@ -24,6 +25,16 @@ const tableDistance = {
   base: 1200
 };
 
+const xhr = new XMLHttpRequest();
+xhr.open("GET", getAdress, true);
+xhr.addEventListener("load", function() {
+  const date = JSON.parse(this.responseText);
+  [...date].forEach(e => reservations.push(e));
+  showDaylyReservations(calendar.value);
+  document.querySelector(".loader").remove();
+});
+xhr.send();
+
 function activeReservation(e) {
   if (!e.target.classList.contains("reservation")) return;
   active = true;
@@ -40,6 +51,11 @@ function dragReservation(e) {
 function putReservation(e) {
   active = false;
   if (!e.target.classList.contains("reservation")) return;
+  setNewReservationValue();
+}
+
+const setNewReservationValue = () => {
+  //zaokrąglamy left i top, tak by rezerwacja mieściła się w konretnej komórce
   newReservation.style.left = `${leftDistance +
     Math.floor(
       (parseInt(newReservation.style.left) - leftDistance + 60) / 150
@@ -56,23 +72,18 @@ function putReservation(e) {
   selectHour.value = `${(parseInt(newReservation.style.top) - topDistance) /
     50 +
     10}:00`;
-}
+};
 
 const getTableByDistance = (tables, value) =>
   Object.keys(tables).find(key => tables[key] === value);
 
-function changePositionByHour(e) {
-  const distance = e.target.value.split(":")[0] - 10;
-  newReservation.style.top = `${topDistance +
-    e.target.value.split(":")[1] * (5 / 6) +
-    distance * 50}px`;
-}
+const changePositionByHour = hour => {
+  const separateHour = hour.split(":");
+  const distance = separateHour[0] - 10; //10 - pierwsza godzina, na którą można robić rezerwacje
+  return `${topDistance + separateHour[1] * (5 / 6) + distance * 50}px`;
+};
 
-const createReservationFromBase = reservation => {
-  const distance = reservation.hour.split(":")[0] - 10;
-  const reservationDiv = document.createElement("div");
-  reservationDiv.classList.add("reservation");
-  reservationDiv.innerHTML = newReservation.innerHTML;
+const createElementInNewDiv = reservationDiv => {
   const deleteDiv = document.createElement("div");
   deleteDiv.classList.add("delete");
   deleteDiv.classList.add("hidden");
@@ -81,14 +92,19 @@ const createReservationFromBase = reservation => {
   changeDiv.classList.add("hidden");
   reservationDiv.appendChild(deleteDiv);
   reservationDiv.appendChild(changeDiv);
+};
+
+const createReservationFromBase = reservation => {
+  const reservationDiv = document.createElement("div");
+  reservationDiv.classList.add("reservation");
+  reservationDiv.innerHTML = newReservation.innerHTML;
+  createElementInNewDiv(reservationDiv);
   reservationDiv.querySelector("#select-table").value = reservation.table;
   reservationDiv.querySelector("#select-hour").value = reservation.hour;
   reservationDiv.querySelector("input").value = reservation.name;
   reservationDiv.style.left = `${tableDistance[reservation.table] +
     leftDistance}px`;
-  reservationDiv.style.top = `${topDistance +
-    reservation.hour.split(":")[1] * (5 / 6) +
-    distance * 50}px`;
+  reservationDiv.style.top = changePositionByHour(reservation.hour);
   reservationDiv.dataset.id = reservation._id;
   document.body.appendChild(reservationDiv);
 };
@@ -99,33 +115,12 @@ const showDaylyReservations = () => {
     .filter(e => !e.classList.contains("new"))
     .forEach(e => e.remove());
   reservations.forEach(reservation => {
-    if (reservation.date == day) createReservationFromBase(reservation);
+    if (reservation.date === day) createReservationFromBase(reservation);
   });
 };
 
-newReservation.addEventListener("mousedown", activeReservation);
-document.addEventListener("mousemove", dragReservation);
-document.addEventListener("mouseup", putReservation);
-selectTable.addEventListener(
-  "change",
-  e =>
-    (newReservation.style.left = `${tableDistance[e.target.value] +
-      leftDistance}px`)
-);
-selectHour.addEventListener("change", changePositionByHour);
-
-let xhr = new XMLHttpRequest();
-xhr.open("GET", getAdress, true);
-xhr.addEventListener("load", function() {
-  const date = JSON.parse(this.responseText);
-  [...date].forEach(e => reservations.push(e));
-  showDaylyReservations(calendar.value);
-  document.querySelector(".loader").remove();
-});
-xhr.send();
-
 document.querySelector(".save").addEventListener("click", () => {
-  let xhr = new XMLHttpRequest();
+  const xhr = new XMLHttpRequest();
   xhr.open("POST", postAdress, true);
   xhr.setRequestHeader("Content-type", "application/json");
   xhr.addEventListener("load", function() {
@@ -139,10 +134,8 @@ document.querySelector(".save").addEventListener("click", () => {
             }`);
 });
 
-calendarPage.addEventListener("click", showDaylyReservations);
-
 const deleteReservation = id => {
-  let xhr = new XMLHttpRequest();
+  const xhr = new XMLHttpRequest();
   xhr.open("DELETE", getAdress, true);
   xhr.setRequestHeader("Content-type", "application/json");
   xhr.addEventListener("load", function() {
@@ -152,10 +145,6 @@ const deleteReservation = id => {
 };
 
 const changeReservation = reservation => {
-  console.log(
-    reservation.dataset.id,
-    reservation.querySelector("#select-table").value
-  );
   const xhr = new XMLHttpRequest();
   xhr.open("PUT", getAdress, true);
   xhr.setRequestHeader("Content-type", "application/json");
@@ -169,6 +158,21 @@ const changeReservation = reservation => {
               "table":"${reservation.querySelector("#select-table").value}"
             }`);
 };
+
+calendarPage.addEventListener("click", showDaylyReservations);
+newReservation.addEventListener("mousedown", activeReservation);
+document.addEventListener("mousemove", dragReservation);
+document.addEventListener("mouseup", putReservation);
+selectTable.addEventListener(
+  "change",
+  e =>
+    (newReservation.style.left = `${tableDistance[e.target.value] +
+      leftDistance}px`)
+);
+selectHour.addEventListener(
+  "change",
+  e => (newReservation.style.top = changePositionByHour(e.target.value))
+);
 document.addEventListener("click", function(e) {
   if (e.target.classList.contains("delete")) {
     deleteReservation(e.target.parentNode.dataset.id);

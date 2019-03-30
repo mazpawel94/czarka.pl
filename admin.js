@@ -204,3 +204,32 @@ document.querySelector(".unlock-change").addEventListener("click", () => {
     .querySelectorAll(".diskette")
     .forEach(e => e.classList.toggle("hidden"));
 });
+
+const add15Minutes = () => {
+  newReservation.style.top = `${parseFloat(newReservation.style.top) +
+    50 / 4}px`;
+  const hourSeparate = selectHour.value.split(":");
+  if (hourSeparate[1] == 45)
+    selectHour.value = `${parseInt(hourSeparate[0]) + 1}:00`;
+  else
+    selectHour.value = `${hourSeparate[0]}:${parseInt(hourSeparate[1]) + 15}`;
+};
+
+const substract15Minutes = () => {
+  newReservation.style.top = `${parseFloat(newReservation.style.top) -
+    50 / 4}px`;
+  const hourSeparate = selectHour.value.split(":");
+  console.log(hourSeparate);
+  if (hourSeparate[1] === "00")
+    selectHour.value = `${parseInt(hourSeparate[0]) - 1}:45`;
+  else {
+    let minutes = parseInt(hourSeparate[1]) - 15;
+    if (!minutes) minutes = "00";
+    selectHour.value = `${parseInt(hourSeparate[0])}:${minutes}`;
+  }
+};
+
+document.addEventListener("keydown", e => {
+  if (e.keyCode === 40) add15Minutes();
+  if (e.keyCode === 38) substract15Minutes();
+});

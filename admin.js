@@ -211,6 +211,7 @@ document.querySelector(".unlock-change").addEventListener("click", () => {
 });
 
 const add15Minutes = () => {
+  if(parseInt(selectHour.value.split(':')[0]) >= 21) return;
   newReservation.style.top = `${parseFloat(newReservation.style.top) +
     50 / 4}px`;
   const hourSeparate = selectHour.value.split(":");
@@ -221,6 +222,7 @@ const add15Minutes = () => {
 };
 
 const substract15Minutes = () => {
+  if(selectHour.value === "10:00") return;
   newReservation.style.top = `${parseFloat(newReservation.style.top) -
     50 / 4}px`;
   const hourSeparate = selectHour.value.split(":");

@@ -236,7 +236,22 @@ const substract15Minutes = () => {
   }
 };
 
+const goToLeft = () => {
+  if(selectTable.value === 'leftRattan') return;
+ newReservation.style.left =`${parseInt(newReservation.style.left) - hourWidth}px`;
+ selectTable.value = getTableByDistance(tableDistance, parseInt(newReservation.style.left)-leftDistance);  // tableDistance[selectTable]/hourWidth
+}
+
+const goToRight = () => {
+  if(selectTable.value === 'base') return;
+ newReservation.style.left =`${parseInt(newReservation.style.left) + hourWidth}px`;
+ selectTable.value = getTableByDistance(tableDistance, parseInt(newReservation.style.left)-leftDistance);  // tableDistance[selectTable]/hourWidth
+}
+
 document.addEventListener("keydown", e => {
   if (e.keyCode === 40) add15Minutes();
   if (e.keyCode === 38) substract15Minutes();
+  if (e.keyCode === 37) goToLeft();
+  if (e.keyCode === 39) goToRight();
+
 });

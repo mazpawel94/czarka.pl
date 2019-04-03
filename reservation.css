@@ -524,7 +524,10 @@ form.active button {
   }
   header {
     min-width: 200px;
+<<<<<<< HEAD
     padding-top: 20px;
+=======
+>>>>>>> 5fce45928bdc320e1884fed4445e63a78425e7e4
     margin: 0 auto;
     height: auto;
   }

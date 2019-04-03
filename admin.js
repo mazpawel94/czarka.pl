@@ -9,12 +9,19 @@ const tablesScheme = document.querySelector(".tables");
 
 const topDistance = tablesScheme.offsetTop + tablesScheme.clientHeight;
 const leftDistance = document.querySelector(".hours").offsetLeft;
+<<<<<<< HEAD
+=======
+let hourWidth = document.querySelector(".table").clientWidth;
+console.log('hourWidth:', hourWidth);
+
+>>>>>>> 5fce45928bdc320e1884fed4445e63a78425e7e4
 let active = false;
 let ofX, ofY;
 const reservations = [];
 
 const tableDistance = {
   leftRattan: 0,
+<<<<<<< HEAD
   rightRattan: 150,
   bigIndian: 300,
   smallIndian: 450,
@@ -23,6 +30,16 @@ const tableDistance = {
   rightChinese: 900,
   board: 1050,
   base: 1200
+=======
+  rightRattan: hourWidth,
+  bigIndian: hourWidth*2,
+  smallIndian: hourWidth*3,
+  japanese: hourWidth*4,
+  leftChinese: hourWidth*5,
+  rightChinese: hourWidth*6,
+  board: hourWidth*7,
+  base: hourWidth*8
+>>>>>>> 5fce45928bdc320e1884fed4445e63a78425e7e4
 };
 
 const xhr = new XMLHttpRequest();
@@ -37,6 +54,10 @@ xhr.send();
 
 function activeReservation(e) {
   if (!e.target.classList.contains("reservation")) return;
+<<<<<<< HEAD
+=======
+  newReservation.style.width = `${hourWidth}px`;
+>>>>>>> 5fce45928bdc320e1884fed4445e63a78425e7e4
   active = true;
   ofX = e.offsetX;
   ofY = e.offsetY;
@@ -58,9 +79,15 @@ const setNewReservationValue = () => {
   //zaokrąglamy left i top, tak by rezerwacja mieściła się w konretnej komórce
   newReservation.style.left = `${leftDistance +
     Math.floor(
+<<<<<<< HEAD
       (parseInt(newReservation.style.left) - leftDistance + 60) / 150
     ) *
       150}px`;
+=======
+      (parseInt(newReservation.style.left) - leftDistance + hourWidth/2) / hourWidth
+    ) *
+    hourWidth}px`;
+>>>>>>> 5fce45928bdc320e1884fed4445e63a78425e7e4
   newReservation.style.top = `${topDistance +
     Math.floor((parseInt(newReservation.style.top) - topDistance + 15) / 50) *
       50}px`;
@@ -74,8 +101,13 @@ const setNewReservationValue = () => {
     10}:00`;
 };
 
+<<<<<<< HEAD
 const getTableByDistance = (tables, value) =>
   Object.keys(tables).find(key => tables[key] === value);
+=======
+const getTableByDistance = (tables, value) => 
+   Object.keys(tables).find(key => tables[key] === value);
+>>>>>>> 5fce45928bdc320e1884fed4445e63a78425e7e4
 
 const changePositionByHour = hour => {
   const separateHour = hour.split(":");
@@ -105,6 +137,10 @@ const createReservationFromBase = reservation => {
   reservationDiv.style.left = `${tableDistance[reservation.table] +
     leftDistance}px`;
   reservationDiv.style.top = changePositionByHour(reservation.hour);
+<<<<<<< HEAD
+=======
+  reservationDiv.style.width = `${hourWidth}px`;
+>>>>>>> 5fce45928bdc320e1884fed4445e63a78425e7e4
   reservationDiv.dataset.id = reservation._id;
   if (localStorage.getItem(reservationDiv.dataset.id) === "true")
     reservationDiv.classList.add("put");
@@ -206,6 +242,10 @@ document.querySelector(".unlock-change").addEventListener("click", () => {
 });
 
 const add15Minutes = () => {
+<<<<<<< HEAD
+=======
+  if(parseInt(selectHour.value.split(':')[0]) >= 21) return;
+>>>>>>> 5fce45928bdc320e1884fed4445e63a78425e7e4
   newReservation.style.top = `${parseFloat(newReservation.style.top) +
     50 / 4}px`;
   const hourSeparate = selectHour.value.split(":");
@@ -216,6 +256,10 @@ const add15Minutes = () => {
 };
 
 const substract15Minutes = () => {
+<<<<<<< HEAD
+=======
+  if(selectHour.value === "10:00") return;
+>>>>>>> 5fce45928bdc320e1884fed4445e63a78425e7e4
   newReservation.style.top = `${parseFloat(newReservation.style.top) -
     50 / 4}px`;
   const hourSeparate = selectHour.value.split(":");
@@ -229,7 +273,28 @@ const substract15Minutes = () => {
   }
 };
 
+<<<<<<< HEAD
 document.addEventListener("keydown", e => {
   if (e.keyCode === 40) add15Minutes();
   if (e.keyCode === 38) substract15Minutes();
+=======
+const goToLeft = () => {
+  if(selectTable.value === 'leftRattan') return;
+ newReservation.style.left =`${parseInt(newReservation.style.left) - hourWidth}px`;
+ selectTable.value = getTableByDistance(tableDistance, parseInt(newReservation.style.left)-leftDistance);  // tableDistance[selectTable]/hourWidth
+}
+
+const goToRight = () => {
+  if(selectTable.value === 'base') return;
+ newReservation.style.left =`${parseInt(newReservation.style.left) + hourWidth}px`;
+ selectTable.value = getTableByDistance(tableDistance, parseInt(newReservation.style.left)-leftDistance);  // tableDistance[selectTable]/hourWidth
+}
+
+document.addEventListener("keydown", e => {
+  if (e.keyCode === 40) add15Minutes();
+  if (e.keyCode === 38) substract15Minutes();
+  if (e.keyCode === 37) goToLeft();
+  if (e.keyCode === 39) goToRight();
+
+>>>>>>> 5fce45928bdc320e1884fed4445e63a78425e7e4
 });

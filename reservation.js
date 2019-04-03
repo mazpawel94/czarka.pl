@@ -42,6 +42,10 @@ const addThreeHours = hours => {
 const aroundMinutes = () => {
   if (!minutesToAround.classList.contains("on")) return;
   const n = Math.round(minutesToAround.innerHTML / 15) * 15;
+<<<<<<< HEAD
+=======
+  console.log(n);
+>>>>>>> 5fce45928bdc320e1884fed4445e63a78425e7e4
   const radius = n * 6;
   rotateClock.style.transform = `rotate(${radius}deg)`;
   if (n < 15 || n == 60) {

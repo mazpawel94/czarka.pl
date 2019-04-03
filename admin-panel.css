@@ -43,10 +43,17 @@ body {
 }
 .tables {
   display: flex;
+<<<<<<< HEAD
   width: 1350px;
 }
 .table {
   width: 150px;
+=======
+  width: 85vw;
+}
+.table {
+  width: calc(100vw/9);
+>>>>>>> 5fce45928bdc320e1884fed4445e63a78425e7e4
   height: 40px;
   position: relative;
   text-align: center;
@@ -57,7 +64,11 @@ body {
   position: absolute;
   content: "";
   width: 1px;
+<<<<<<< HEAD
   height: 640px;
+=======
+  height: 590px;
+>>>>>>> 5fce45928bdc320e1884fed4445e63a78425e7e4
   background-color: rgb(51, 43, 43);
   right: 0;
   top: 0;
@@ -66,7 +77,11 @@ body {
 .hour {
   position: relative;
   height: 50px;
+<<<<<<< HEAD
   width: 1350px;
+=======
+  width: 85vw;
+>>>>>>> 5fce45928bdc320e1884fed4445e63a78425e7e4
 }
 
 .hour:nth-child(2n) {
@@ -75,7 +90,11 @@ body {
 .hour::after {
   content: "";
   position: absolute;
+<<<<<<< HEAD
   width: 1350px;
+=======
+  width: 85vw;
+>>>>>>> 5fce45928bdc320e1884fed4445e63a78425e7e4
   height: 1px;
   background-color: rgb(51, 43, 43);
   left: 0;

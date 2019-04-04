@@ -175,6 +175,7 @@ textarea {
   transform: translateX(-50%);
   border-top: 1px solid white;
   border-radius: 5px;
+  padding: 3px;
   background-color: #cd5c5c;
   -webkit-transform: translateX(-50%);
   -moz-transform: translateX(-50%);

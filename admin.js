@@ -42,7 +42,8 @@ const setSize = () => {
   });
 };
 setSize();
-
+newReservation.style.top = "calc(50% - 50px)";
+newReservation.style.left = 0;
 const xhr = new XMLHttpRequest();
 xhr.open("GET", getAdress, true);
 xhr.addEventListener("load", function() {
@@ -122,6 +123,8 @@ const createReservationFromBase = reservation => {
   reservationDiv.querySelector("#select-hour").value = reservation.hour;
   reservationDiv.querySelector("input").value = reservation.name;
   reservationDiv.querySelector("textarea").value = reservation.note;
+  if (reservation.note)
+    reservationDiv.querySelector("textarea").classList.remove("hidden");
   reservationDiv.style.left = `${tableDistance[reservation.table] +
     leftDistance}px`;
   reservationDiv.style.top = changePositionByHour(reservation.hour);

@@ -121,6 +121,7 @@ const createReservationFromBase = reservation => {
   reservationDiv.querySelector("#select-table").value = reservation.table;
   reservationDiv.querySelector("#select-hour").value = reservation.hour;
   reservationDiv.querySelector("input").value = reservation.name;
+  reservationDiv.querySelector("textarea").value = reservation.note;
   reservationDiv.style.left = `${tableDistance[reservation.table] +
     leftDistance}px`;
   reservationDiv.style.top = changePositionByHour(reservation.hour);
@@ -148,11 +149,12 @@ document.querySelector(".save").addEventListener("click", () => {
   xhr.addEventListener("load", function() {
     location.reload();
   });
+  console.log(newReservation.querySelector("textarea").value);
   xhr.send(`{ "day": "${calendar.value}",
               "hour": "${selectHour.value}",
               "name": "${newReservation.querySelector("input").value}",
               "table":"${selectTable.value}",
-              "numberPeople": 2
+              "note": "${newReservation.querySelector("textarea").value}"
             }`);
 });
 
@@ -177,7 +179,8 @@ const changeReservation = reservation => {
               "day": "${calendar.value}",
               "hour": "${reservation.querySelector("#select-hour").value}",
               "name": "${reservation.querySelector("input").value}",
-              "table":"${reservation.querySelector("#select-table").value}"
+              "table":"${reservation.querySelector("#select-table").value}",
+              "note": "${reservation.querySelector("textarea").value}"
             }`);
 };
 
@@ -205,6 +208,9 @@ document.addEventListener("click", function(e) {
   }
   if (e.target.classList.contains("diskette")) {
     changeReservation(e.target.parentNode);
+  }
+  if (e.target.nodeName === "SPAN") {
+    e.target.parentNode.querySelector("textarea").classList.toggle("hidden");
   }
 });
 

@@ -36,7 +36,6 @@ const setSize = () => {
     (key, index) => (tableDistance[key] = hourWidth * index)
   );
   [...reservationDivs].forEach(reservation => {
-    console.log(reservation);
     reservation.style.width = `${hourWidth}px`;
     reservation.style.left = `${leftDistance +
       tableDistance[reservation.querySelector("#select-table").value]}px`;
@@ -87,7 +86,6 @@ const setNewReservationValue = () => {
       50}px`;
   newReservation.style.backgroundColor = "rgb(180, 190, 39)";
   selectTable.value = getTableByDistance(
-    tableDistance,
     parseInt(newReservation.style.left) - leftDistance
   );
   selectHour.value = `${(parseInt(newReservation.style.top) - topDistance) /
@@ -95,8 +93,8 @@ const setNewReservationValue = () => {
     10}:00`;
 };
 
-const getTableByDistance = (tables, value) =>
-  Object.keys(tables).find(key => tables[key] === value);
+const getTableByDistance = value =>
+  Object.keys(tableDistance).find(key => tableDistance[key] === value);
 
 const changePositionByHour = hour => {
   const separateHour = hour.split(":");
@@ -187,6 +185,8 @@ calendarPage.addEventListener("click", showDaylyReservations);
 newReservation.addEventListener("mousedown", activeReservation);
 document.addEventListener("mousemove", dragReservation);
 document.addEventListener("mouseup", putReservation);
+
+//zmiana pozycji nowej rezerwacji poprzez wybór z listy
 selectTable.addEventListener(
   "change",
   e =>
@@ -197,6 +197,8 @@ selectHour.addEventListener(
   "change",
   e => (newReservation.style.top = changePositionByHour(e.target.value))
 );
+
+//delegacja zdarzeń - nasłuchiwanie na usunięcie rezerwacji lub jej zmianę
 document.addEventListener("click", function(e) {
   if (e.target.classList.contains("delete")) {
     deleteReservation(e.target.parentNode.dataset.id);
@@ -206,6 +208,7 @@ document.addEventListener("click", function(e) {
   }
 });
 
+//oznaczanie rezerwacji jako położona - zapis w local storage
 document.addEventListener("dblclick", function(e) {
   if (e.target.classList.contains("reservation")) {
     e.target.classList.toggle("put");
@@ -215,6 +218,7 @@ document.addEventListener("dblclick", function(e) {
     );
   }
 });
+
 document.querySelector(".unlock-delete").addEventListener("click", () => {
   document
     .querySelectorAll(".delete")
@@ -243,7 +247,6 @@ const substract15Minutes = () => {
   newReservation.style.top = `${parseFloat(newReservation.style.top) -
     50 / 4}px`;
   const hourSeparate = selectHour.value.split(":");
-  console.log(hourSeparate);
   if (hourSeparate[1] === "00")
     selectHour.value = `${parseInt(hourSeparate[0]) - 1}:45`;
   else {
@@ -258,9 +261,8 @@ const goToLeft = () => {
   newReservation.style.left = `${parseInt(newReservation.style.left) -
     hourWidth}px`;
   selectTable.value = getTableByDistance(
-    tableDistance,
     parseInt(newReservation.style.left) - leftDistance
-  ); // tableDistance[selectTable]/hourWidth
+  );
 };
 
 const goToRight = () => {
@@ -268,9 +270,8 @@ const goToRight = () => {
   newReservation.style.left = `${parseInt(newReservation.style.left) +
     hourWidth}px`;
   selectTable.value = getTableByDistance(
-    tableDistance,
     parseInt(newReservation.style.left) - leftDistance
-  ); // tableDistance[selectTable]/hourWidth
+  );
 };
 
 document.addEventListener("keydown", e => {

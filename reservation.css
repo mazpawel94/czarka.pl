@@ -8,6 +8,8 @@
 body {
   background-image: url("img/DSC_4905.jpg");
   background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
   display: flex;
   justify-content: space-around;
   font-family: "Lato";
@@ -85,6 +87,8 @@ i {
   background-color: var(--color);
   width: 85vh;
   height: 85vh;
+  max-width: 700px;
+  max-height: 700px;
   box-shadow: 0 0 30px 10px black;
   border-radius: 3px;
 }
@@ -524,10 +528,7 @@ form.active button {
   }
   header {
     min-width: 200px;
-<<<<<<< HEAD
     padding-top: 20px;
-=======
->>>>>>> 5fce45928bdc320e1884fed4445e63a78425e7e4
     margin: 0 auto;
     height: auto;
   }

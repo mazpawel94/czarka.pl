@@ -74,7 +74,11 @@ xhr.addEventListener("load", function() {
 xhr.send();
 
 function activeReservation(e) {
-  if (!e.target.parentNode.classList.contains("reservation")) return;
+  if (
+    !e.target.parentNode.classList.contains("reservation") ||
+    e.target.nodeName === "INPUT"
+  )
+    return;
   newReservation.style.width = `${hourWidth}px`;
   newReservation.style.height = `${hourHeight * 3}px`;
   active = true;
@@ -158,6 +162,7 @@ const showDaylyReservations = () => {
 };
 
 document.querySelector(".save").addEventListener("click", () => {
+  if (!selectTable.value || !selectHour.value) return;
   const xhr = new XMLHttpRequest();
   xhr.open("POST", fullAdres, true);
   xhr.setRequestHeader("Content-type", "application/json");
@@ -224,9 +229,6 @@ document.addEventListener("click", function(e) {
   }
   if (e.target.classList.contains("diskette")) {
     changeReservation(e.target.parentNode);
-  }
-  if (e.target.nodeName === "SPAN") {
-    e.target.parentNode.querySelector("textarea").classList.toggle("hidden");
   }
 });
 

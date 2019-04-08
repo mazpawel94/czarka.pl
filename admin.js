@@ -255,6 +255,10 @@ document.querySelector(".unlock-change").addEventListener("click", () => {
 
 const add15Minutes = () => {
   if (parseInt(selectHour.value.split(":")[0]) >= 21) return;
+  if (!selectHour.value) {
+    selectHour.value = "14:00";
+    newReservation.style.top = changePositionByHour(selectHour.value);
+  }
   newReservation.style.top = `${parseFloat(newReservation.style.top) +
     hourHeight / 4}px`;
   const hourSeparate = selectHour.value.split(":");
@@ -266,6 +270,10 @@ const add15Minutes = () => {
 
 const substract15Minutes = () => {
   if (selectHour.value === "10:00") return;
+  if (!selectHour.value) {
+    selectHour.value = "14:00";
+    newReservation.style.top = changePositionByHour(selectHour.value);
+  }
   newReservation.style.top = `${parseFloat(newReservation.style.top) -
     hourHeight / 4}px`;
   const hourSeparate = selectHour.value.split(":");
@@ -289,6 +297,12 @@ const goToLeft = () => {
 
 const goToRight = () => {
   if (selectTable.value === "base") return;
+  if (!selectTable.value) {
+    selectTable.value = "leftRattan";
+    newReservation.style.left = `${leftDistance +
+      tableDistance[selectTable.value]}px`;
+    return;
+  }
   newReservation.style.left = `${parseInt(newReservation.style.left) +
     hourWidth}px`;
   selectTable.value = getTableByDistance(

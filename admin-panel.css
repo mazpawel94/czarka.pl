@@ -6,11 +6,15 @@ body {
   margin: 0;
   text-align: center;
   background-color: rgba(124, 117, 117, 0.109);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 .nav-wrapper {
   display: flex;
   align-items: center;
+  height: 10%;
 }
 .date-wrapper {
   width: 50vw;
@@ -37,25 +41,34 @@ body {
 }
 .scheme {
   width: 100vw;
+  height: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 .tables {
   display: flex;
+  height: 10%;
+}
+.save-wrapper {
+  height: 10%;
+}
+.hours {
+  height: 90%;
 }
 .table {
-  height: 40px;
+  height: 100%;
   position: relative;
-  text-align: center;
-  line-height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-bottom: 1px solid black;
 }
 .table::after {
   position: absolute;
   content: "";
   width: 1px;
-  height: 590px;
+  height: 80vh;
   background-color: rgb(51, 43, 43);
   right: 0;
   top: 0;
@@ -63,7 +76,7 @@ body {
 }
 .hour {
   position: relative;
-  height: 50px;
+  height: calc(100% / 11);
 }
 
 .hour:nth-child(2n) {
@@ -217,6 +230,10 @@ button {
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
+}
+
+.save {
+  min-width: 200px;
 }
 .unlock-delete,
 .unlock-change {

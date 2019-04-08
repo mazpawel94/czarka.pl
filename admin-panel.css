@@ -80,7 +80,11 @@ body {
 }
 
 .hour:nth-child(2n) {
-  background-color: lightgray;
+  background-color: rgb(200, 199, 199);
+}
+
+.hour:nth-child(2n + 1) {
+  background-color: rgb(182, 168, 168);
 }
 .hour::after {
   content: "";

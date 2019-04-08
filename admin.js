@@ -8,7 +8,7 @@ const selectHour = newReservation.querySelector("#select-hour");
 const tablesScheme = document.querySelector(".tables");
 const reservationDivs = document.getElementsByClassName("reservation");
 let active = false;
-let ofX, ofY, topDistance, leftDistance, hourWidth;
+let ofX, ofY, topDistance, leftDistance, hourWidth, hourHeight;
 const reservations = [];
 const tableDistance = {
   leftRattan: 0,
@@ -29,9 +29,14 @@ const setSize = () => {
   document.querySelector(".hours").style.width = `${Math.floor(
     (window.innerWidth * 0.85) / 9
   ) * 9}px`;
+  document.querySelector(".hours").style.height = `${Math.floor(
+    (window.innerHeight * 0.8 - document.querySelector(".table").clientHeight) /
+      11
+  ) * 11}px`;
   topDistance = tablesScheme.offsetTop + tablesScheme.clientHeight;
   leftDistance = document.querySelector(".hours").offsetLeft;
   hourWidth = document.querySelector(".table").clientWidth;
+  hourHeight = document.querySelector(".hour").clientHeight;
   Object.keys(tableDistance).forEach(
     (key, index) => (tableDistance[key] = hourWidth * index)
   );
@@ -57,6 +62,7 @@ xhr.send();
 function activeReservation(e) {
   if (!e.target.classList.contains("reservation")) return;
   newReservation.style.width = `${hourWidth}px`;
+  newReservation.style.height = `${hourHeight * 3}px`;
   active = true;
   ofX = e.offsetX;
   ofY = e.offsetY;
@@ -83,14 +89,16 @@ const setNewReservationValue = () => {
     ) *
       hourWidth}px`;
   newReservation.style.top = `${topDistance +
-    Math.floor((parseInt(newReservation.style.top) - topDistance + 15) / 50) *
-      50}px`;
+    Math.floor(
+      (parseInt(newReservation.style.top) - topDistance + 15) / hourHeight
+    ) *
+      hourHeight}px`;
   newReservation.style.backgroundColor = "rgb(180, 190, 39)";
   selectTable.value = getTableByDistance(
     parseInt(newReservation.style.left) - leftDistance
   );
   selectHour.value = `${(parseInt(newReservation.style.top) - topDistance) /
-    50 +
+    hourHeight +
     10}:00`;
 };
 
@@ -100,7 +108,7 @@ const getTableByDistance = value =>
 const changePositionByHour = hour => {
   const separateHour = hour.split(":");
   const distance = separateHour[0] - 10; //10 - pierwsza godzina, na którą można robić rezerwacje
-  return `${topDistance + separateHour[1] * (5 / 6) + distance * 50}px`;
+  return `${topDistance + separateHour[1] * (5 / 6) + distance * hourHeight}px`;
 };
 
 const createElementInNewDiv = reservationDiv => {
@@ -243,7 +251,7 @@ document.querySelector(".unlock-change").addEventListener("click", () => {
 const add15Minutes = () => {
   if (parseInt(selectHour.value.split(":")[0]) >= 21) return;
   newReservation.style.top = `${parseFloat(newReservation.style.top) +
-    50 / 4}px`;
+    hourHeight / 4}px`;
   const hourSeparate = selectHour.value.split(":");
   if (hourSeparate[1] == 45)
     selectHour.value = `${parseInt(hourSeparate[0]) + 1}:00`;
@@ -254,7 +262,7 @@ const add15Minutes = () => {
 const substract15Minutes = () => {
   if (selectHour.value === "10:00") return;
   newReservation.style.top = `${parseFloat(newReservation.style.top) -
-    50 / 4}px`;
+    hourHeight / 4}px`;
   const hourSeparate = selectHour.value.split(":");
   if (hourSeparate[1] === "00")
     selectHour.value = `${parseInt(hourSeparate[0]) - 1}:45`;

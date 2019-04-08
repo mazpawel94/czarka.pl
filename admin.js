@@ -22,6 +22,15 @@ const tableDistance = {
   base: hourWidth * 8
 };
 
+const getTableByDistance = value =>
+  Object.keys(tableDistance).find(key => tableDistance[key] === value);
+
+const changePositionByHour = hour => {
+  const separateHour = hour.split(":");
+  const distance = separateHour[0] - 10; //10 - pierwsza godzina, na którą można robić rezerwacje
+  return `${topDistance + separateHour[1] * (5 / 6) + distance * hourHeight}px`;
+};
+
 const setSize = () => {
   [...tablesScheme.querySelectorAll(".table")].forEach(
     e => (e.style.width = `${Math.floor((window.innerWidth * 0.85) / 9)}px`)
@@ -33,7 +42,7 @@ const setSize = () => {
     (window.innerHeight * 0.8 - document.querySelector(".table").clientHeight) /
       11
   ) * 11}px`;
-  topDistance = tablesScheme.offsetTop + tablesScheme.clientHeight;
+  topDistance = document.querySelector(".hour").offsetTop;
   leftDistance = document.querySelector(".hours").offsetLeft;
   hourWidth = document.querySelector(".table").clientWidth;
   hourHeight = document.querySelector(".hour").clientHeight;
@@ -42,15 +51,20 @@ const setSize = () => {
   );
   [...reservationDivs].forEach(reservation => {
     reservation.style.width = `${hourWidth}px`;
+    console.log(`${hourHeight * 3}px`);
+    reservation.style.height = `${hourHeight * 3}px`;
     reservation.style.left = `${leftDistance +
       tableDistance[reservation.querySelector("#select-table").value]}px`;
+    reservation.style.top = changePositionByHour(
+      reservation.querySelector("#select-hour").value
+    );
   });
 };
 setSize();
 newReservation.style.top = "calc(50% - 50px)";
 newReservation.style.left = 0;
 const xhr = new XMLHttpRequest();
-xhr.open("GET", getAdress, true);
+xhr.open("GET", fullAdres, true);
 xhr.addEventListener("load", function() {
   const date = JSON.parse(this.responseText);
   [...date].forEach(e => reservations.push(e));
@@ -60,12 +74,12 @@ xhr.addEventListener("load", function() {
 xhr.send();
 
 function activeReservation(e) {
-  if (!e.target.classList.contains("reservation")) return;
+  if (!e.target.parentNode.classList.contains("reservation")) return;
   newReservation.style.width = `${hourWidth}px`;
   newReservation.style.height = `${hourHeight * 3}px`;
   active = true;
   ofX = e.offsetX;
-  ofY = e.offsetY;
+  ofY = e.offsetY + 30; //30px - wysokość inputa rezerwacji
 }
 
 function dragReservation(e) {
@@ -76,7 +90,7 @@ function dragReservation(e) {
 
 function putReservation(e) {
   active = false;
-  if (!e.target.classList.contains("reservation")) return;
+  if (!e.target.parentNode.classList.contains("reservation")) return;
   setNewReservationValue();
 }
 
@@ -90,7 +104,7 @@ const setNewReservationValue = () => {
       hourWidth}px`;
   newReservation.style.top = `${topDistance +
     Math.floor(
-      (parseInt(newReservation.style.top) - topDistance + 15) / hourHeight
+      (parseInt(newReservation.style.top) - topDistance) / hourHeight
     ) *
       hourHeight}px`;
   newReservation.style.backgroundColor = "rgb(180, 190, 39)";
@@ -100,15 +114,6 @@ const setNewReservationValue = () => {
   selectHour.value = `${(parseInt(newReservation.style.top) - topDistance) /
     hourHeight +
     10}:00`;
-};
-
-const getTableByDistance = value =>
-  Object.keys(tableDistance).find(key => tableDistance[key] === value);
-
-const changePositionByHour = hour => {
-  const separateHour = hour.split(":");
-  const distance = separateHour[0] - 10; //10 - pierwsza godzina, na którą można robić rezerwacje
-  return `${topDistance + separateHour[1] * (5 / 6) + distance * hourHeight}px`;
 };
 
 const createElementInNewDiv = reservationDiv => {
@@ -129,14 +134,13 @@ const createReservationFromBase = reservation => {
   createElementInNewDiv(reservationDiv);
   reservationDiv.querySelector("#select-table").value = reservation.table;
   reservationDiv.querySelector("#select-hour").value = reservation.hour;
+  reservationDiv.querySelector("#select-guests").value = reservation.guests;
   reservationDiv.querySelector("input").value = reservation.name;
-  reservationDiv.querySelector("textarea").value = reservation.note;
-  if (reservation.note)
-    reservationDiv.querySelector("textarea").classList.remove("hidden");
   reservationDiv.style.left = `${tableDistance[reservation.table] +
     leftDistance}px`;
   reservationDiv.style.top = changePositionByHour(reservation.hour);
   reservationDiv.style.width = `${hourWidth}px`;
+  reservationDiv.style.height = `${hourHeight * 3}px`;
   reservationDiv.dataset.id = reservation._id;
   if (localStorage.getItem(reservationDiv.dataset.id) === "true")
     reservationDiv.classList.add("put");
@@ -155,23 +159,24 @@ const showDaylyReservations = () => {
 
 document.querySelector(".save").addEventListener("click", () => {
   const xhr = new XMLHttpRequest();
-  xhr.open("POST", postAdress, true);
+  xhr.open("POST", fullAdres, true);
   xhr.setRequestHeader("Content-type", "application/json");
   xhr.addEventListener("load", function() {
     location.reload();
   });
-  console.log(newReservation.querySelector("textarea").value);
   xhr.send(`{ "day": "${calendar.value}",
               "hour": "${selectHour.value}",
               "name": "${newReservation.querySelector("input").value}",
               "table":"${selectTable.value}",
-              "note": "${newReservation.querySelector("textarea").value}"
+              "guests": "${
+                newReservation.querySelector("#select-guests").value
+              }"
             }`);
 });
 
 const deleteReservation = id => {
   const xhr = new XMLHttpRequest();
-  xhr.open("DELETE", getAdress, true);
+  xhr.open("DELETE", fullAdres, true);
   xhr.setRequestHeader("Content-type", "application/json");
   xhr.addEventListener("load", function() {
     location.reload();
@@ -181,7 +186,7 @@ const deleteReservation = id => {
 
 const changeReservation = reservation => {
   const xhr = new XMLHttpRequest();
-  xhr.open("PUT", getAdress, true);
+  xhr.open("PUT", fullAdres, true);
   xhr.setRequestHeader("Content-type", "application/json");
   xhr.addEventListener("load", function() {
     location.reload();
@@ -191,7 +196,7 @@ const changeReservation = reservation => {
               "hour": "${reservation.querySelector("#select-hour").value}",
               "name": "${reservation.querySelector("input").value}",
               "table":"${reservation.querySelector("#select-table").value}",
-              "note": "${reservation.querySelector("textarea").value}"
+              "guests": "${reservation.querySelector("#select-guests").value}"
             }`);
 };
 

@@ -51,7 +51,6 @@ const setSize = () => {
   );
   [...reservationDivs].forEach(reservation => {
     reservation.style.width = `${hourWidth}px`;
-    console.log(`${hourHeight * 3}px`);
     reservation.style.height = `${hourHeight * 3}px`;
     reservation.style.left = `${leftDistance +
       tableDistance[reservation.querySelector("#select-table").value]}px`;
@@ -165,7 +164,7 @@ const showDaylyReservations = () => {
   });
 };
 
-document.querySelector(".save").addEventListener("click", () => {
+const saveNewReservation = () => {
   if (!selectTable.value || !selectHour.value) return;
   const xhr = new XMLHttpRequest();
   xhr.open("POST", fullAdres, true);
@@ -181,7 +180,9 @@ document.querySelector(".save").addEventListener("click", () => {
                 newReservation.querySelector("#select-guests").value
               }"
             }`);
-});
+};
+
+document.querySelector(".save").addEventListener("click", saveNewReservation);
 
 const deleteReservation = id => {
   const xhr = new XMLHttpRequest();
@@ -321,6 +322,7 @@ document.addEventListener("keydown", e => {
   if (e.keyCode === 38) substract15Minutes();
   if (e.keyCode === 37) goToLeft();
   if (e.keyCode === 39) goToRight();
+  if (e.keyCode === 13) saveNewReservation();
 });
 
 window.addEventListener("resize", setSize);

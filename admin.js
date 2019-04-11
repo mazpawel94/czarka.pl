@@ -94,7 +94,11 @@ function dragReservation(e) {
 
 function putReservation(e) {
   active = false;
-  if (!e.target.parentNode.classList.contains("reservation")) return;
+  if (
+    !e.target.parentNode.classList.contains("reservation") ||
+    e.target.nodeName === "INPUT"
+  )
+    return;
   setNewReservationValue();
 }
 
@@ -234,7 +238,7 @@ document.addEventListener("click", function(e) {
 
 //oznaczanie rezerwacji jako położona - zapis w local storage
 document.addEventListener("dblclick", function(e) {
-  if (e.target.classList.contains("reservation")) {
+  if (e.target.classList.contains("select-wrapper")) {
     e.target.classList.toggle("put");
     localStorage.setItem(
       e.target.dataset.id,

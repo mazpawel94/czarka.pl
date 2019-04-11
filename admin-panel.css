@@ -129,7 +129,7 @@ body {
   z-index: 100;
 }
 
-.reservation.put {
+.put {
   background-color: green;
 }
 .reservation input {

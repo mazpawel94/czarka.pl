@@ -65,7 +65,12 @@ setSize();
 newReservation.style.top = "calc(50% - 50px)";
 newReservation.style.left = 0;
 const xhr = new XMLHttpRequest();
-xhr.open("GET", fullAdres, true);
+console.log(`${fullAdres}?password=${localStorage.getItem("password")}`);
+xhr.open(
+  "GET",
+  `${fullAdres}?password=${localStorage.getItem("password")}`,
+  true
+);
 xhr.addEventListener("load", function() {
   const date = JSON.parse(this.responseText);
   [...date].forEach(e => reservations.push(e));
@@ -170,7 +175,11 @@ const saveNewReservation = () => {
   if (!selectTable.value || !selectHour.value) return;
   saveButton.classList.add("hidden");
   const xhr = new XMLHttpRequest();
-  xhr.open("POST", fullAdres, true);
+  xhr.open(
+    "POST",
+    `${fullAdres}?password=${localStorage.getItem("password")}`,
+    true
+  );
   xhr.setRequestHeader("Content-type", "application/json");
   xhr.addEventListener("load", function() {
     location.reload();
@@ -187,7 +196,11 @@ const saveNewReservation = () => {
 
 const deleteReservation = id => {
   const xhr = new XMLHttpRequest();
-  xhr.open("DELETE", fullAdres, true);
+  xhr.open(
+    "DELETE",
+    `${fullAdres}?password=${localStorage.getItem("password")}`,
+    true
+  );
   xhr.setRequestHeader("Content-type", "application/json");
   xhr.addEventListener("load", function() {
     location.reload();
@@ -197,7 +210,11 @@ const deleteReservation = id => {
 
 const changeReservation = reservation => {
   const xhr = new XMLHttpRequest();
-  xhr.open("PUT", fullAdres, true);
+  xhr.open(
+    "PUT",
+    `${fullAdres}?password=${localStorage.getItem("password")}`,
+    true
+  );
   xhr.setRequestHeader("Content-type", "application/json");
   xhr.addEventListener("load", function() {
     location.reload();
@@ -325,3 +342,15 @@ document.addEventListener("keydown", e => {
 });
 
 window.addEventListener("resize", setSize);
+
+document.querySelector(".password-button").addEventListener("click", () => {
+  localStorage.setItem("password", document.querySelector("#pass").value);
+  console.log(document.querySelector("#pass").value);
+  document.querySelector(".password").remove();
+  location.reload();
+});
+
+if (!localStorage.getItem("password")) {
+  document.querySelector(".loader").remove();
+  document.querySelector(".password").classList.remove("hidden");
+}

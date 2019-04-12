@@ -30,6 +30,7 @@
     <div class="nav-wrapper">
       <button class="unlock-delete">Usuń rezerwację</button>
       <button class="unlock-change">Edytuj rezerwację</button>
+      <button class="save">Zapisz nową rezerwację</button>
       <div class="date-wrapper">
         <i class="far fa-calendar-alt"></i>
         <input
@@ -76,7 +77,13 @@
       </div>
     </div>
     <div class="reservation new">
-      <input type="text" name="name" autocomplete="off" autofocus />
+      <input
+        type="text"
+        name="name"
+        autocomplete="off"
+        autofocus
+        placeholder="Dodaj nową"
+      />
       <div class="select-wrapper">
         <select id="select-table">
           <option value=""></option>
@@ -148,9 +155,6 @@
           <option value=">10">ponad 10 osób</option>
         </select>
       </div>
-    </div>
-    <div class="save-wrapper">
-      <button class="save hidden">Zapisz rezerwację</button>
     </div>
     <script
       src="https://code.jquery.com/jquery-3.3.1.js"

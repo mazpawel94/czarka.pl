@@ -166,13 +166,9 @@ const showDaylyReservations = () => {
   });
 };
 
-const showSaveButton = () => {
-  if (selectHour.value && selectTable.value && name.value)
-    saveButton.classList.remove("hidden");
-  else saveButton.classList.add("hidden");
-};
 const saveNewReservation = () => {
   if (!selectTable.value || !selectHour.value) return;
+  saveButton.classList.add("hidden");
   const xhr = new XMLHttpRequest();
   xhr.open("POST", fullAdres, true);
   xhr.setRequestHeader("Content-type", "application/json");
@@ -225,11 +221,9 @@ document.addEventListener("mouseup", putReservation);
 selectTable.addEventListener("change", e => {
   newReservation.style.left = `${tableDistance[e.target.value] +
     leftDistance}px`;
-  showSaveButton();
 });
 selectHour.addEventListener("change", e => {
   newReservation.style.top = changePositionByHour(e.target.value);
-  showSaveButton();
 });
 
 //delegacja zdarzeń - nasłuchiwanie na usunięcie rezerwacji lub jej zmianę
@@ -263,7 +257,6 @@ document.querySelector(".unlock-change").addEventListener("click", () => {
   document
     .querySelectorAll(".diskette")
     .forEach(e => e.classList.toggle("hidden"));
-  saveButton.classList.add("hidden");
 });
 
 const add15Minutes = () => {
@@ -324,7 +317,6 @@ const goToRight = () => {
 };
 
 document.addEventListener("keydown", e => {
-  showSaveButton();
   if (e.keyCode === 40) add15Minutes();
   if (e.keyCode === 38) substract15Minutes();
   if (e.keyCode === 37) goToLeft();

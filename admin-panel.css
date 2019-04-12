@@ -13,11 +13,13 @@ body {
 
 .nav-wrapper {
   display: flex;
-  align-items: center;
   height: 10%;
 }
 .date-wrapper {
   width: 50vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 #date {
   position: relative;
@@ -44,7 +46,8 @@ body {
   height: 80%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
+  padding-right: 20px;
 }
 .tables {
   display: flex;
@@ -175,6 +178,7 @@ body {
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
+  margin-top: 1px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   padding: 3px;
@@ -203,25 +207,19 @@ body {
 }
 
 button {
-  background-color: rgb(57, 190, 30);
   border: none;
   padding: 10px;
   margin: 10px;
   font-size: 22px;
   color: white;
-  border-radius: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   cursor: pointer;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
 }
 
-.save {
-  min-width: 200px;
-}
 .unlock-delete,
-.unlock-change {
+.unlock-change,
+.save {
   background-color: rgb(161, 150, 150);
   margin: 0;
   margin-left: 10px;

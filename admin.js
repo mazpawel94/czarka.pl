@@ -90,7 +90,7 @@ function activeReservation(e) {
 function dragReservation(e) {
   if (!active) return;
   newReservation.style.left = `${e.clientX - ofX}px`;
-  newReservation.style.top = `${e.clientY - ofY}px`;
+  newReservation.style.top = `${e.clientY + window.scrollY - ofY}px`;
 }
 
 function putReservation(e) {

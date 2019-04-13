@@ -23,7 +23,15 @@ const tableDistance = {
   board: hourWidth * 7,
   base: hourWidth * 8
 };
-
+const weekDays = [
+  "niedziela",
+  "poniedziałek",
+  "wtorek",
+  "środa",
+  "czwartek",
+  "piątek",
+  "sobota"
+];
 const getTableByDistance = value =>
   Object.keys(tableDistance).find(key => tableDistance[key] === value);
 
@@ -169,6 +177,7 @@ const showDaylyReservations = () => {
   reservations.forEach(reservation => {
     if (reservation.date === day) createReservationFromBase(reservation);
   });
+  setWeekDay();
 };
 
 const saveNewReservation = () => {
@@ -357,8 +366,12 @@ if (!localStorage.getItem("password")) {
 
 const addZero = integer => (integer < 10 ? `0${integer}` : integer);
 
+const setWeekDay = () => {
+  document.querySelector("span").textContent =
+    weekDays[new Date(calendar.value.split("/").reverse()).getDay()];
+};
+
 function changeDate(e) {
-  console.log(e.target.dataset.value);
   const splitDate = calendar.value.split("/");
   const newDate = new Date(
     parseInt(splitDate[2]),
@@ -369,7 +382,7 @@ function changeDate(e) {
     newDate.getMonth()
   )}/${newDate.getFullYear()}`;
   showDaylyReservations();
-  console.log(newDate);
+  setWeekDay();
 }
 document.getElementById("previous-day").addEventListener("click", changeDate);
 

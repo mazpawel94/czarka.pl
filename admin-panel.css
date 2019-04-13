@@ -43,6 +43,7 @@ body {
   height: 10%;
 }
 .date-wrapper {
+  position: relative;
   width: 50vw;
   display: flex;
   align-items: center;
@@ -365,4 +366,15 @@ button {
 #previous-day {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
+}
+
+span {
+  position: absolute;
+  bottom: 0;
+  left: calc(50% + 10px);
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
 }

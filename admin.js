@@ -367,7 +367,7 @@ if (!localStorage.getItem("password")) {
 const addZero = integer => (integer < 10 ? `0${integer}` : integer);
 
 const setWeekDay = () => {
-  document.querySelector("span").textContent =
+  document.querySelector(".date-wrapper span").textContent =
     weekDays[new Date(calendar.value.split("/").reverse()).getDay()];
 };
 

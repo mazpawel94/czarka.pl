@@ -354,3 +354,23 @@ if (!localStorage.getItem("password")) {
   document.querySelector(".loader").remove();
   document.querySelector(".password").classList.remove("hidden");
 }
+
+const addZero = integer => (integer < 10 ? `0${integer}` : integer);
+
+function changeDate(e) {
+  console.log(e.target.dataset.value);
+  const splitDate = calendar.value.split("/");
+  const newDate = new Date(
+    parseInt(splitDate[2]),
+    parseInt(splitDate[1]),
+    parseInt(splitDate[0]) + parseInt(e.target.dataset.value)
+  );
+  calendar.value = `${addZero(newDate.getDate())}/${addZero(
+    newDate.getMonth()
+  )}/${newDate.getFullYear()}`;
+  showDaylyReservations();
+  console.log(newDate);
+}
+document.getElementById("previous-day").addEventListener("click", changeDate);
+
+document.getElementById("next-day").addEventListener("click", changeDate);

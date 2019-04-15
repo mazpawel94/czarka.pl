@@ -132,6 +132,9 @@ body {
   top: -8px;
   left: -50px;
 }
+.hour.sunday {
+  background-color: rgb(95, 6, 6);
+}
 
 .reservation {
   position: absolute;

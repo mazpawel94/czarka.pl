@@ -1,4 +1,4 @@
-$("#date").dateDropper();
+﻿$("#date").dateDropper();
 
 const calendar = document.querySelector("#date");
 const calendarPage = document.getElementById("datedropper-0");
@@ -9,6 +9,8 @@ const name = newReservation.querySelector("input");
 const tablesScheme = document.querySelector(".tables");
 const reservationDivs = document.getElementsByClassName("reservation");
 const saveButton = document.querySelector(".save");
+const weekDay = document.querySelector(".date-wrapper span");
+const hourDivs = document.querySelectorAll(".hour");
 let active = false;
 let ofX, ofY, topDistance, leftDistance, hourWidth, hourHeight;
 const reservations = [];
@@ -52,10 +54,10 @@ const setSize = () => {
     (window.innerHeight * 0.8 - document.querySelector(".table").clientHeight) /
       11
   ) * 11}px`;
-  topDistance = document.querySelector(".hour").offsetTop;
+  topDistance = hourDivs[0].offsetTop;
   leftDistance = document.querySelector(".hours").offsetLeft;
   hourWidth = document.querySelector(".table").clientWidth;
-  hourHeight = document.querySelector(".hour").clientHeight;
+  hourHeight = hourDivs[0].clientHeight;
   Object.keys(tableDistance).forEach(
     (key, index) => (tableDistance[key] = hourWidth * index)
   );
@@ -180,6 +182,95 @@ const showDaylyReservations = () => {
   setWeekDay();
 };
 
+const addZero = integer => (integer < 10 ? `0${integer}` : integer);
+
+const setSundayHours = () => {
+  if (weekDay.textContent === "niedziela") {
+    hourDivs[0].classList.add("sunday");
+    hourDivs[1].classList.add("sunday");
+    hourDivs[10].classList.add("sunday");
+  } else {
+    hourDivs.forEach(e => e.classList.remove("sunday"));
+  }
+};
+
+const setWeekDay = () => {
+  weekDay.textContent =
+    weekDays[new Date(calendar.value.split("/").reverse()).getDay()];
+  setSundayHours();
+};
+
+function changeDate(e) {
+  const splitDate = calendar.value.split("/");
+  const newDate = new Date(
+    parseInt(splitDate[2]),
+    parseInt(splitDate[1]),
+    parseInt(splitDate[0]) + parseInt(e.target.dataset.value)
+  );
+  calendar.value = `${addZero(newDate.getDate())}/${addZero(
+    newDate.getMonth()
+  )}/${newDate.getFullYear()}`;
+  showDaylyReservations();
+  setWeekDay();
+}
+
+const add15Minutes = () => {
+  if (parseInt(selectHour.value.split(":")[0]) >= 21) return;
+  if (!selectHour.value) {
+    selectHour.value = "14:00";
+    newReservation.style.top = changePositionByHour(selectHour.value);
+  }
+  newReservation.style.top = `${parseFloat(newReservation.style.top) +
+    hourHeight / 4}px`;
+  const hourSeparate = selectHour.value.split(":");
+  if (hourSeparate[1] == 45)
+    selectHour.value = `${parseInt(hourSeparate[0]) + 1}:00`;
+  else
+    selectHour.value = `${hourSeparate[0]}:${parseInt(hourSeparate[1]) + 15}`;
+};
+
+const substract15Minutes = () => {
+  if (selectHour.value === "10:00") return;
+  if (!selectHour.value) {
+    selectHour.value = "14:00";
+    newReservation.style.top = changePositionByHour(selectHour.value);
+  }
+  newReservation.style.top = `${parseFloat(newReservation.style.top) -
+    hourHeight / 4}px`;
+  const hourSeparate = selectHour.value.split(":");
+  if (hourSeparate[1] === "00")
+    selectHour.value = `${parseInt(hourSeparate[0]) - 1}:45`;
+  else {
+    let minutes = parseInt(hourSeparate[1]) - 15;
+    if (!minutes) minutes = "00";
+    selectHour.value = `${parseInt(hourSeparate[0])}:${minutes}`;
+  }
+};
+
+const goToLeft = () => {
+  if (selectTable.value === "leftRattan") return;
+  newReservation.style.left = `${parseInt(newReservation.style.left) -
+    hourWidth}px`;
+  selectTable.value = getTableByDistance(
+    parseInt(newReservation.style.left) - leftDistance
+  );
+};
+
+const goToRight = () => {
+  if (selectTable.value === "base") return;
+  if (!selectTable.value) {
+    selectTable.value = "leftRattan";
+    newReservation.style.left = `${leftDistance +
+      tableDistance[selectTable.value]}px`;
+    return;
+  }
+  newReservation.style.left = `${parseInt(newReservation.style.left) +
+    hourWidth}px`;
+  selectTable.value = getTableByDistance(
+    parseInt(newReservation.style.left) - leftDistance
+  );
+};
+
 const saveNewReservation = () => {
   if (!selectTable.value || !selectHour.value) return;
   saveButton.classList.add("hidden");
@@ -267,7 +358,7 @@ document.addEventListener("dblclick", function(e) {
   if (e.target.classList.contains("select-wrapper")) {
     e.target.classList.toggle("put");
     localStorage.setItem(
-      e.target.dataset.id,
+      e.target.parentNode.dataset.id,
       e.target.classList.contains("put")
     );
   }
@@ -285,63 +376,6 @@ document.querySelector(".unlock-change").addEventListener("click", () => {
     .forEach(e => e.classList.toggle("hidden"));
 });
 
-const add15Minutes = () => {
-  if (parseInt(selectHour.value.split(":")[0]) >= 21) return;
-  if (!selectHour.value) {
-    selectHour.value = "14:00";
-    newReservation.style.top = changePositionByHour(selectHour.value);
-  }
-  newReservation.style.top = `${parseFloat(newReservation.style.top) +
-    hourHeight / 4}px`;
-  const hourSeparate = selectHour.value.split(":");
-  if (hourSeparate[1] == 45)
-    selectHour.value = `${parseInt(hourSeparate[0]) + 1}:00`;
-  else
-    selectHour.value = `${hourSeparate[0]}:${parseInt(hourSeparate[1]) + 15}`;
-};
-
-const substract15Minutes = () => {
-  if (selectHour.value === "10:00") return;
-  if (!selectHour.value) {
-    selectHour.value = "14:00";
-    newReservation.style.top = changePositionByHour(selectHour.value);
-  }
-  newReservation.style.top = `${parseFloat(newReservation.style.top) -
-    hourHeight / 4}px`;
-  const hourSeparate = selectHour.value.split(":");
-  if (hourSeparate[1] === "00")
-    selectHour.value = `${parseInt(hourSeparate[0]) - 1}:45`;
-  else {
-    let minutes = parseInt(hourSeparate[1]) - 15;
-    if (!minutes) minutes = "00";
-    selectHour.value = `${parseInt(hourSeparate[0])}:${minutes}`;
-  }
-};
-
-const goToLeft = () => {
-  if (selectTable.value === "leftRattan") return;
-  newReservation.style.left = `${parseInt(newReservation.style.left) -
-    hourWidth}px`;
-  selectTable.value = getTableByDistance(
-    parseInt(newReservation.style.left) - leftDistance
-  );
-};
-
-const goToRight = () => {
-  if (selectTable.value === "base") return;
-  if (!selectTable.value) {
-    selectTable.value = "leftRattan";
-    newReservation.style.left = `${leftDistance +
-      tableDistance[selectTable.value]}px`;
-    return;
-  }
-  newReservation.style.left = `${parseInt(newReservation.style.left) +
-    hourWidth}px`;
-  selectTable.value = getTableByDistance(
-    parseInt(newReservation.style.left) - leftDistance
-  );
-};
-
 document.addEventListener("keydown", e => {
   if (e.keyCode === 40) add15Minutes();
   if (e.keyCode === 38) substract15Minutes();
@@ -349,8 +383,6 @@ document.addEventListener("keydown", e => {
   if (e.keyCode === 39) goToRight();
   if (e.keyCode === 13) saveNewReservation();
 });
-
-window.addEventListener("resize", setSize);
 
 document.querySelector(".password-button").addEventListener("click", () => {
   localStorage.setItem("password", document.querySelector("#pass").value);
@@ -364,26 +396,6 @@ if (!localStorage.getItem("password")) {
   document.querySelector(".password").classList.remove("hidden");
 }
 
-const addZero = integer => (integer < 10 ? `0${integer}` : integer);
-
-const setWeekDay = () => {
-  document.querySelector(".date-wrapper span").textContent =
-    weekDays[new Date(calendar.value.split("/").reverse()).getDay()];
-};
-
-function changeDate(e) {
-  const splitDate = calendar.value.split("/");
-  const newDate = new Date(
-    parseInt(splitDate[2]),
-    parseInt(splitDate[1]),
-    parseInt(splitDate[0]) + parseInt(e.target.dataset.value)
-  );
-  calendar.value = `${addZero(newDate.getDate())}/${addZero(
-    newDate.getMonth()
-  )}/${newDate.getFullYear()}`;
-  showDaylyReservations();
-  setWeekDay();
-}
 document.getElementById("previous-day").addEventListener("click", changeDate);
-
 document.getElementById("next-day").addEventListener("click", changeDate);
+window.addEventListener("resize", setSize);

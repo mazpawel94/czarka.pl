@@ -24,7 +24,8 @@ const compareHours = (pickedHour, elementHour) => {
 };
 
 const endReservation = startReservation => {
-  const end = parseInt(startReservation.slice(0, 2)) + 3;
+  let end = parseInt(startReservation.slice(0, 2)) + 3;
+  if (end >= 22) return "22:00";
   return end + startReservation.slice(2);
 };
 

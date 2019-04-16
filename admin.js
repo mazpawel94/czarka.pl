@@ -10,7 +10,9 @@ const tablesScheme = document.querySelector(".tables");
 const reservationDivs = document.getElementsByClassName("reservation");
 const saveButton = document.querySelector(".save");
 const weekDay = document.querySelector(".date-wrapper span");
+const hoursWrapper = document.querySelector(".hours");
 const hourDivs = document.querySelectorAll(".hour");
+
 let active = false;
 let ofX, ofY, topDistance, leftDistance, hourWidth, hourHeight;
 const reservations = [];
@@ -34,8 +36,23 @@ const weekDays = [
   "piątek",
   "sobota"
 ];
-const getTableByDistance = value =>
-  Object.keys(tableDistance).find(key => tableDistance[key] === value);
+
+const reservationFromBase = new XMLHttpRequest();
+reservationFromBase.open(
+  "GET",
+  `${fullAdres}?password=${localStorage.getItem("password")}`,
+  true
+);
+reservationFromBase.addEventListener("load", function() {
+  const date = JSON.parse(this.responseText);
+  [...date].forEach(e => reservations.push(e));
+  showDaylyReservations(calendar.value);
+  document.querySelector(".loader").remove();
+});
+reservationFromBase.send();
+
+const getTableByDistance = distance =>
+  Object.keys(tableDistance).find(key => tableDistance[key] === distance);
 
 const changePositionByHour = hour => {
   const separateHour = hour.split(":");
@@ -43,51 +60,41 @@ const changePositionByHour = hour => {
   return `${topDistance + separateHour[1] * (5 / 6) + distance * hourHeight}px`;
 };
 
-const setSize = () => {
-  [...tablesScheme.querySelectorAll(".table")].forEach(
-    e => (e.style.width = `${Math.floor((window.innerWidth * 0.85) / 9)}px`)
+const setReservationSize = reservation => {
+  reservation.style.width = `${hourWidth}px`;
+  reservation.style.height = `${hourHeight * 3}px`;
+  reservation.style.left = `${leftDistance +
+    tableDistance[reservation.querySelector("#select-table").value]}px`;
+  reservation.style.top = changePositionByHour(
+    reservation.querySelector("#select-hour").value
   );
-  document.querySelector(".hours").style.width = `${Math.floor(
-    (window.innerWidth * 0.85) / 9
-  ) * 9}px`;
-  document.querySelector(".hours").style.height = `${Math.floor(
+};
+const setSchemeSize = () => {
+  [...tablesScheme.querySelectorAll(".table")].forEach(
+    table =>
+      (table.style.width = `${Math.floor((window.innerWidth * 0.85) / 9)}px`)
+  );
+  hoursWrapper.style.width = `${Math.floor((window.innerWidth * 0.85) / 9) *
+    9}px`;
+  hoursWrapper.style.height = `${Math.floor(
     (window.innerHeight * 0.8 - document.querySelector(".table").clientHeight) /
       11
   ) * 11}px`;
+};
+const setSize = () => {
+  setSchemeSize();
   topDistance = hourDivs[0].offsetTop;
-  leftDistance = document.querySelector(".hours").offsetLeft;
+  leftDistance = hoursWrapper.offsetLeft;
   hourWidth = document.querySelector(".table").clientWidth;
   hourHeight = hourDivs[0].clientHeight;
   Object.keys(tableDistance).forEach(
     (key, index) => (tableDistance[key] = hourWidth * index)
   );
-  [...reservationDivs].forEach(reservation => {
-    reservation.style.width = `${hourWidth}px`;
-    reservation.style.height = `${hourHeight * 3}px`;
-    reservation.style.left = `${leftDistance +
-      tableDistance[reservation.querySelector("#select-table").value]}px`;
-    reservation.style.top = changePositionByHour(
-      reservation.querySelector("#select-hour").value
-    );
-  });
+  [...reservationDivs].forEach(reservation => setReservationSize(reservation));
 };
 setSize();
 newReservation.style.top = "calc(50% - 50px)";
 newReservation.style.left = 0;
-const xhr = new XMLHttpRequest();
-console.log(`${fullAdres}?password=${localStorage.getItem("password")}`);
-xhr.open(
-  "GET",
-  `${fullAdres}?password=${localStorage.getItem("password")}`,
-  true
-);
-xhr.addEventListener("load", function() {
-  const date = JSON.parse(this.responseText);
-  [...date].forEach(e => reservations.push(e));
-  showDaylyReservations(calendar.value);
-  document.querySelector(".loader").remove();
-});
-xhr.send();
 
 function activeReservation(e) {
   if (
@@ -95,8 +102,6 @@ function activeReservation(e) {
     e.target.nodeName === "INPUT"
   )
     return;
-  newReservation.style.width = `${hourWidth}px`;
-  newReservation.style.height = `${hourHeight * 3}px`;
   active = true;
   ofX = e.offsetX;
   ofY = e.offsetY + 30; //30px - wysokość inputa rezerwacji
@@ -142,11 +147,9 @@ const setNewReservationValue = () => {
 
 const createElementInNewDiv = reservationDiv => {
   const deleteDiv = document.createElement("div");
-  deleteDiv.classList.add("delete");
-  deleteDiv.classList.add("hidden");
+  deleteDiv.classList.add("delete", "hidden");
   const changeDiv = document.createElement("div");
-  changeDiv.classList.add("diskette");
-  changeDiv.classList.add("hidden");
+  changeDiv.classList.add("diskette", "hidden");
   reservationDiv.appendChild(deleteDiv);
   reservationDiv.appendChild(changeDiv);
 };
@@ -160,11 +163,7 @@ const createReservationFromBase = reservation => {
   reservationDiv.querySelector("#select-hour").value = reservation.hour;
   reservationDiv.querySelector("#select-guests").value = reservation.guests;
   reservationDiv.querySelector("input").value = reservation.name;
-  reservationDiv.style.left = `${tableDistance[reservation.table] +
-    leftDistance}px`;
-  reservationDiv.style.top = changePositionByHour(reservation.hour);
-  reservationDiv.style.width = `${hourWidth}px`;
-  reservationDiv.style.height = `${hourHeight * 3}px`;
+  setReservationSize(reservationDiv);
   reservationDiv.dataset.id = reservation._id;
   if (localStorage.getItem(reservationDiv.dataset.id) === "true")
     reservationDiv.classList.add("put");
@@ -174,8 +173,8 @@ const createReservationFromBase = reservation => {
 const showDaylyReservations = () => {
   const day = calendar.value;
   [...document.querySelectorAll(".reservation")]
-    .filter(e => !e.classList.contains("new"))
-    .forEach(e => e.remove());
+    .filter(reservation => !reservation.classList.contains("new"))
+    .forEach(reservation => reservation.remove());
   reservations.forEach(reservation => {
     if (reservation.date === day) createReservationFromBase(reservation);
   });
@@ -189,9 +188,7 @@ const setSundayHours = () => {
     hourDivs[0].classList.add("sunday");
     hourDivs[1].classList.add("sunday");
     hourDivs[10].classList.add("sunday");
-  } else {
-    hourDivs.forEach(e => e.classList.remove("sunday"));
-  }
+  } else hourDivs.forEach(hour => hour.classList.remove("sunday"));
 };
 
 const setWeekDay = () => {
@@ -273,7 +270,7 @@ const goToRight = () => {
 
 const saveNewReservation = () => {
   if (!selectTable.value || !selectHour.value) return;
-  saveButton.classList.add("hidden");
+  saveButton.style.visibility = "hidden";
   const xhr = new XMLHttpRequest();
   xhr.open(
     "POST",
@@ -330,18 +327,21 @@ const changeReservation = reservation => {
 
 saveButton.addEventListener("click", saveNewReservation);
 calendarPage.addEventListener("click", showDaylyReservations);
+document.getElementById("previous-day").addEventListener("click", changeDate);
+document.getElementById("next-day").addEventListener("click", changeDate);
 newReservation.addEventListener("mousedown", activeReservation);
 document.addEventListener("mousemove", dragReservation);
 document.addEventListener("mouseup", putReservation);
-
-//zmiana pozycji nowej rezerwacji poprzez wybór z listy
-selectTable.addEventListener("change", e => {
-  newReservation.style.left = `${tableDistance[e.target.value] +
-    leftDistance}px`;
-});
-selectHour.addEventListener("change", e => {
-  newReservation.style.top = changePositionByHour(e.target.value);
-});
+selectTable.addEventListener(
+  "change",
+  e =>
+    (newReservation.style.left = `${tableDistance[e.target.value] +
+      leftDistance}px`)
+);
+selectHour.addEventListener(
+  "change",
+  e => (newReservation.style.top = changePositionByHour(e.target.value))
+);
 
 //delegacja zdarzeń - nasłuchiwanie na usunięcie rezerwacji lub jej zmianę
 document.addEventListener("click", function(e) {
@@ -383,6 +383,7 @@ document.addEventListener("keydown", e => {
   if (e.keyCode === 39) goToRight();
   if (e.keyCode === 13) saveNewReservation();
 });
+window.addEventListener("resize", setSize);
 
 document.querySelector(".password-button").addEventListener("click", () => {
   localStorage.setItem("password", document.querySelector("#pass").value);
@@ -395,7 +396,3 @@ if (!localStorage.getItem("password")) {
   document.querySelector(".loader").remove();
   document.querySelector(".password").classList.remove("hidden");
 }
-
-document.getElementById("previous-day").addEventListener("click", changeDate);
-document.getElementById("next-day").addEventListener("click", changeDate);
-window.addEventListener("resize", setSize);

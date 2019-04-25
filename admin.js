@@ -12,6 +12,8 @@ const saveButton = document.querySelector(".save");
 const weekDay = document.querySelector(".date-wrapper span");
 const hoursWrapper = document.querySelector(".hours");
 const hourDivs = document.querySelectorAll(".hour");
+selectTable.value = '';
+selectHour.value = '';
 
 let active = false;
 let ofX, ofY, topDistance, leftDistance, hourWidth, hourHeight;
@@ -37,27 +39,13 @@ const weekDays = [
   "sobota"
 ];
 
-const reservationFromBase = new XMLHttpRequest();
-reservationFromBase.open(
-  "GET",
-  `${fullAdres}?password=${localStorage.getItem("password")}`,
-  true
-);
-reservationFromBase.addEventListener("load", function() {
-  const date = JSON.parse(this.responseText);
-  [...date].forEach(e => reservations.push(e));
-  showDaylyReservations(calendar.value);
-  document.querySelector(".loader").remove();
-});
-reservationFromBase.send();
-
 const getTableByDistance = distance =>
   Object.keys(tableDistance).find(key => tableDistance[key] === distance);
 
 const changePositionByHour = hour => {
   const separateHour = hour.split(":");
   const distance = separateHour[0] - 10; //10 - pierwsza godzina, na którą można robić rezerwacje
-  return `${topDistance + separateHour[1] * (5 / 6) + distance * hourHeight}px`;
+  return `${topDistance + hourHeight * (separateHour[1] / 60) + distance * hourHeight}px`;
 };
 
 const setReservationSize = reservation => {
@@ -78,7 +66,7 @@ const setSchemeSize = () => {
     9}px`;
   hoursWrapper.style.height = `${Math.floor(
     (window.innerHeight * 0.8 - document.querySelector(".table").clientHeight) /
-      11
+    11
   ) * 11}px`;
 };
 const setSize = () => {
@@ -91,10 +79,11 @@ const setSize = () => {
     (key, index) => (tableDistance[key] = hourWidth * index)
   );
   [...reservationDivs].forEach(reservation => setReservationSize(reservation));
+  if (!selectHour.value && !selectTable.value) {
+    newReservation.style.top = "calc(50% - 50px)";
+    newReservation.style.left = 0;
+  }
 };
-setSize();
-newReservation.style.top = "calc(50% - 50px)";
-newReservation.style.left = 0;
 
 function activeReservation(e) {
   if (
@@ -116,11 +105,12 @@ function dragReservation(e) {
 function putReservation(e) {
   active = false;
   if (
-    !e.target.parentNode.classList.contains("reservation") ||
+    !e.target.parentNode.classList.contains("new") ||
     e.target.nodeName === "INPUT"
   )
     return;
   setNewReservationValue();
+  activeSaveButton();
 }
 
 const setNewReservationValue = () => {
@@ -128,14 +118,14 @@ const setNewReservationValue = () => {
   newReservation.style.left = `${leftDistance +
     Math.floor(
       (parseInt(newReservation.style.left) - leftDistance + hourWidth / 2) /
-        hourWidth
+      hourWidth
     ) *
-      hourWidth}px`;
+    hourWidth}px`;
   newReservation.style.top = `${topDistance +
     Math.floor(
       (parseInt(newReservation.style.top) - topDistance) / hourHeight
     ) *
-      hourHeight}px`;
+    hourHeight}px`;
   newReservation.style.backgroundColor = "rgb(180, 190, 39)";
   selectTable.value = getTableByDistance(
     parseInt(newReservation.style.left) - leftDistance
@@ -268,6 +258,22 @@ const goToRight = () => {
   );
 };
 
+const getReservationsFromBase = () => {
+  const reservationFromBase = new XMLHttpRequest();
+  reservationFromBase.open(
+    "GET",
+    `${fullAdres}?password=${localStorage.getItem("password")}`,
+    true
+  );
+  reservationFromBase.addEventListener("load", function () {
+    const date = JSON.parse(this.responseText);
+    [...date].forEach(e => reservations.push(e));
+    showDaylyReservations(calendar.value);
+    document.querySelector(".loader").remove();
+  });
+  reservationFromBase.send();
+}
+
 const saveNewReservation = () => {
   if (!selectTable.value || !selectHour.value) return;
   saveButton.style.visibility = "hidden";
@@ -278,7 +284,7 @@ const saveNewReservation = () => {
     true
   );
   xhr.setRequestHeader("Content-type", "application/json");
-  xhr.addEventListener("load", function() {
+  xhr.addEventListener("load", function () {
     location.reload();
   });
   xhr.send(`{ "day": "${calendar.value}",
@@ -286,8 +292,8 @@ const saveNewReservation = () => {
               "name": "${name.value}",
               "table":"${selectTable.value}",
               "guests": "${
-                newReservation.querySelector("#select-guests").value
-              }"
+    newReservation.querySelector("#select-guests").value
+    }"
             }`);
 };
 
@@ -299,7 +305,7 @@ const deleteReservation = id => {
     true
   );
   xhr.setRequestHeader("Content-type", "application/json");
-  xhr.addEventListener("load", function() {
+  xhr.addEventListener("load", function () {
     location.reload();
   });
   xhr.send(`{ "id": "${id}"}`);
@@ -313,7 +319,7 @@ const changeReservation = reservation => {
     true
   );
   xhr.setRequestHeader("Content-type", "application/json");
-  xhr.addEventListener("load", function() {
+  xhr.addEventListener("load", function () {
     location.reload();
   });
   xhr.send(`{ "id": "${reservation.dataset.id}",
@@ -325,6 +331,11 @@ const changeReservation = reservation => {
             }`);
 };
 
+const activeSaveButton = () => {
+  if (selectHour.value && selectTable.value && name.value)
+    return saveButton.classList.remove('disabled');
+  saveButton.classList.add('disabled');
+}
 saveButton.addEventListener("click", saveNewReservation);
 calendarPage.addEventListener("click", showDaylyReservations);
 document.getElementById("previous-day").addEventListener("click", changeDate);
@@ -334,17 +345,21 @@ document.addEventListener("mousemove", dragReservation);
 document.addEventListener("mouseup", putReservation);
 selectTable.addEventListener(
   "change",
-  e =>
-    (newReservation.style.left = `${tableDistance[e.target.value] +
-      leftDistance}px`)
-);
+  e => {
+    newReservation.style.left = `${tableDistance[e.target.value] +
+      leftDistance}px`;
+    activeSaveButton();
+  });
 selectHour.addEventListener(
   "change",
-  e => (newReservation.style.top = changePositionByHour(e.target.value))
+  e => {
+    newReservation.style.top = changePositionByHour(e.target.value);
+    activeSaveButton();
+  }
 );
-
+name.addEventListener("input", activeSaveButton);
 //delegacja zdarzeń - nasłuchiwanie na usunięcie rezerwacji lub jej zmianę
-document.addEventListener("click", function(e) {
+document.addEventListener("click", function (e) {
   if (e.target.classList.contains("delete")) {
     deleteReservation(e.target.parentNode.dataset.id);
   }
@@ -354,7 +369,7 @@ document.addEventListener("click", function(e) {
 });
 
 //oznaczanie rezerwacji jako położona - zapis w local storage
-document.addEventListener("dblclick", function(e) {
+document.addEventListener("dblclick", function (e) {
   if (e.target.classList.contains("select-wrapper")) {
     e.target.classList.toggle("put");
     localStorage.setItem(
@@ -383,8 +398,6 @@ document.addEventListener("keydown", e => {
   if (e.keyCode === 39) goToRight();
   if (e.keyCode === 13) saveNewReservation();
 });
-window.addEventListener("resize", setSize);
-
 document.querySelector(".password-button").addEventListener("click", () => {
   localStorage.setItem("password", document.querySelector("#pass").value);
   console.log(document.querySelector("#pass").value);
@@ -396,3 +409,6 @@ if (!localStorage.getItem("password")) {
   document.querySelector(".loader").remove();
   document.querySelector(".password").classList.remove("hidden");
 }
+window.addEventListener("resize", setSize);
+setSize();
+getReservationsFromBase();

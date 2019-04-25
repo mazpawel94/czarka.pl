@@ -10,7 +10,6 @@ body {
   flex-direction: column;
   height: 100vh;
 }
-
 .password {
   position: absolute;
   background-color: white;
@@ -21,14 +20,6 @@ body {
   height: 200px;
   border-radius: 15px;
   transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
-  -webkit-border-radius: 15px;
-  -moz-border-radius: 15px;
-  -ms-border-radius: 15px;
-  -o-border-radius: 15px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -81,6 +72,7 @@ body {
   height: 40px;
   line-height: 20px;
   text-align: center;
+  background-color: rgb(216, 210, 210);
 }
 
 #next-day {
@@ -189,6 +181,7 @@ body {
 .reservation.new {
   background-image: linear-gradient(135deg, #81fbb8 10%, #28c76f 100%);
   z-index: 100;
+  cursor: pointer;
 }
 
 .put {
@@ -279,12 +272,14 @@ button {
 .unlock-delete,
 .unlock-change,
 .save {
-  background-color: rgb(161, 150, 150);
+  background-color: rgb(14, 177, 35);
   margin: 0;
   margin-left: 10px;
   align-self: flex-end;
 }
-
+.disabled {
+  background-color: rgb(161, 150, 150);
+}
 .hidden {
   display: none;
 }

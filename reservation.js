@@ -64,6 +64,14 @@ function showReservation() {
   reservations.forEach(reservation => {
     if (
       reservation.date == pickedDay &&
+      compareHours(addThreeHours(pickedHour), reservation.hour)
+    ) {
+      const table = document.querySelector(`.${reservation.table}`);
+      table.classList.add("busy-soon");
+      table.dataset.busySoon = ` Najbliższa rezerwacja \ ${reservation.hour}`;
+    }
+    else if (
+      reservation.date == pickedDay &&
       compareHours(pickedHour, reservation.hour)
     ) {
       const table = document.querySelector(`.${reservation.table}`);
@@ -71,13 +79,6 @@ function showReservation() {
       table.dataset.busy = `Rezerwacja \ ${reservation.hour} - ${endReservation(
         reservation.hour
       )}`;
-    } else if (
-      reservation.date == pickedDay &&
-      compareHours(addThreeHours(pickedHour), reservation.hour)
-    ) {
-      const table = document.querySelector(`.${reservation.table}`);
-      table.classList.add("busy-soon");
-      table.dataset.busySoon = ` Najbliższa rezerwacja \ ${reservation.hour}`;
     }
   });
 }
@@ -88,7 +89,7 @@ clock.addEventListener("touchmove", showReservation);
 
 let xhr = new XMLHttpRequest();
 xhr.open("GET", "https://czarka-api.herokuapp.com/reservations", true);
-xhr.addEventListener("load", function() {
+xhr.addEventListener("load", function () {
   const date = JSON.parse(this.responseText);
   [...date].forEach(e => reservations.push(e));
   showReservation();

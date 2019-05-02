@@ -191,11 +191,11 @@ function changeDate(e) {
   const splitDate = calendar.value.split("/");
   const newDate = new Date(
     parseInt(splitDate[2]),
-    parseInt(splitDate[1]),
+    parseInt(splitDate[1]) - 1,
     parseInt(splitDate[0]) + parseInt(e.target.dataset.value)
   );
   calendar.value = `${addZero(newDate.getDate())}/${addZero(
-    newDate.getMonth()
+    newDate.getMonth() + 1
   )}/${newDate.getFullYear()}`;
   showDaylyReservations();
   setWeekDay();

@@ -11,7 +11,7 @@ const minutesToAround = document.querySelectorAll(".td-time>span")[1];
 const rotateClock = document.querySelector(".td-n");
 const tables = document.querySelectorAll(".table");
 
-const reservations = [];
+let reservations = [];
 
 const compareHours = (pickedHour, elementHour) => {
   const pickedMinutes =
@@ -22,6 +22,18 @@ const compareHours = (pickedHour, elementHour) => {
     return false;
   return true;
 };
+
+const compareDate = (a, b) => {
+  const date1Array = a.date.split('/');
+  const hour1Array = a.hour.split(":");
+  const date2Array = b.date.split('/');
+  const hour2Array = b.hour.split(':');
+  const date1 = new Date(parseInt(date1Array[2]), parseInt(date1Array[1]) - 1, parseInt(date1Array[0]), parseInt(hour1Array[0]), parseInt(hour1Array[1])).getTime();
+  const date2 = new Date(parseInt(date2Array[2]), parseInt(date2Array[1]) - 1, parseInt(date2Array[0]), parseInt(hour2Array[0]), parseInt(hour2Array[1])).getTime();
+  if (date1 < date2) return -1;
+  if (date1 > date2) return 1;
+  return 0;
+}
 
 const endReservation = startReservation => {
   let end = parseInt(startReservation.slice(0, 2)) + 3;
@@ -64,14 +76,6 @@ function showReservation() {
   reservations.forEach(reservation => {
     if (
       reservation.date == pickedDay &&
-      compareHours(addThreeHours(pickedHour), reservation.hour)
-    ) {
-      const table = document.querySelector(`.${reservation.table}`);
-      table.classList.add("busy-soon");
-      table.dataset.busySoon = ` Najbliższa rezerwacja \ ${reservation.hour}`;
-    }
-    else if (
-      reservation.date == pickedDay &&
       compareHours(pickedHour, reservation.hour)
     ) {
       const table = document.querySelector(`.${reservation.table}`);
@@ -79,6 +83,14 @@ function showReservation() {
       table.dataset.busy = `Rezerwacja \ ${reservation.hour} - ${endReservation(
         reservation.hour
       )}`;
+    } else if (
+      reservation.date == pickedDay &&
+      compareHours(addThreeHours(pickedHour), reservation.hour)
+    ) {
+      const table = document.querySelector(`.${reservation.table}`);
+      if (table.classList.contains("busy") || table.classList.contains("busy-soon")) return;
+      table.classList.add("busy-soon");
+      table.dataset.busySoon = ` Najbliższa rezerwacja \ ${reservation.hour}`;
     }
   });
 }
@@ -92,6 +104,7 @@ xhr.open("GET", "https://czarka-api.herokuapp.com/reservations", true);
 xhr.addEventListener("load", function () {
   const date = JSON.parse(this.responseText);
   [...date].forEach(e => reservations.push(e));
+  reservations.sort(compareDate);
   showReservation();
   [...document.querySelector(".loader").querySelectorAll("div")].forEach(
     e => (e.style.animationPlayState = "paused")
@@ -100,3 +113,4 @@ xhr.addEventListener("load", function () {
 });
 
 xhr.send();
+

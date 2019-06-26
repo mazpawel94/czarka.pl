@@ -148,8 +148,8 @@ i {
 }
 
 .rhomb1 {
-  right: 10%;
-  bottom: 40%;
+  right: 25%;
+  bottom: 45%;
 }
 .rhomb2 {
   bottom: 30%;
@@ -278,10 +278,6 @@ i {
   transform: translateX(-50%);
   height: 2rem;
   opacity: 1;
-  -webkit-transform: ;
-  -moz-transform: ;
-  -ms-transform: ;
-  -o-transform: ;
 }
 
 .bench:hover::after {

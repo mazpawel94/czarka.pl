@@ -16,21 +16,24 @@ const timeLine = document.querySelector(".now");
 selectTable.value = '';
 selectHour.value = '';
 
+const tablesAmount = 11;
 
 let now = new Date();
 let active = false;
 let ofX, ofY, topDistance, leftDistance, hourWidth, hourHeight;
 const reservations = [];
 const tableDistance = {
-  leftRattan: 0,
-  rightRattan: hourWidth,
-  bigIndian: hourWidth * 2,
-  smallIndian: hourWidth * 3,
-  japanese: hourWidth * 4,
-  leftChinese: hourWidth * 5,
-  rightChinese: hourWidth * 6,
-  board: hourWidth * 7,
-  base: hourWidth * 8
+  tram1: 0,
+  tram2: hourWidth,
+  tram3: hourWidth * 2,
+  rhomb1: hourWidth * 3,
+  rhomb2: hourWidth * 4,
+  rhomb3: hourWidth * 5,
+  smallIndian: hourWidth * 6,
+  bench1: hourWidth * 7,
+  bench2: hourWidth * 8,
+  bench3: hourWidth * 9,
+  bench4: hourWidth * 10
 };
 const weekDays = [
   "niedziela",
@@ -67,10 +70,10 @@ const setReservationSize = reservation => {
 const setSchemeSize = () => {
   [...tablesScheme.querySelectorAll(".table")].forEach(
     table =>
-      (table.style.width = `${Math.floor((window.innerWidth * 0.85) / 9)}px`)
+      (table.style.width = `${Math.floor((window.innerWidth * 0.85) / tablesAmount)}px`)
   );
-  hoursWrapper.style.width = `${Math.floor((window.innerWidth * 0.85) / 9) *
-    9}px`;
+  hoursWrapper.style.width = `${Math.floor((window.innerWidth * 0.85) / tablesAmount) *
+    tablesAmount}px`;
   hoursWrapper.style.height = `${Math.floor(
     (window.innerHeight * 0.8 - document.querySelector(".table").clientHeight) /
     11
